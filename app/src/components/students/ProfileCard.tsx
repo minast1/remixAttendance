@@ -183,7 +183,10 @@ export default function ProfileCard() {
               sx={{ textTransform: "capitalize" }}
               endIcon={<Logout />}
               onClick={() =>
-                fetcher.submit({}, { method: "post", action: `/students` })
+                fetcher.submit(
+                  { button: "student_signout" },
+                  { method: "post", action: `/auth/signOut` }
+                )
               }
             >
               Logout

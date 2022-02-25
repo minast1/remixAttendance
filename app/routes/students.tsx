@@ -42,12 +42,8 @@ export default function StudentRoute() {
 }
 export const action: ActionFunction = async ({ request }) => {
   let formData = await request.formData();
-  let action = formData.get("button");
-  if (action === "addCoursesToStudent") {
-    let data = formData.getAll("courses") as string[];
 
-    return await addStudentCourses(data, request);
-  }
+  let data = formData.getAll("courses") as string[];
 
-  return await authenticator.logout(request, { redirectTo: "/" });
+  return await addStudentCourses(data, request);
 };

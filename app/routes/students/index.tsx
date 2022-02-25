@@ -7,9 +7,3 @@ import { authenticator } from "~/lib/auth.server";
 export default function Attendance() {
   return <AttendanceForm />;
 }
-
-export const action: ActionFunction = async ({ request }) => {
-  //console.log(request.method) ;
-  await authenticator.logout(request, { redirectTo: "/" });
-  return null;
-};
