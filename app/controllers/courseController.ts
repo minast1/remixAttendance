@@ -1,4 +1,5 @@
-import { Course, Level, Semester } from "@prisma/client";
+import { Course, Level, Semester, Student } from "@prisma/client";
+import { getSession } from "~/lib/session.server";
 import { db } from "../lib/db.server";
 
 export async function  getCoursesWithLecturers () {
@@ -60,10 +61,20 @@ export async function deleteCourse(Id: string) {
     })
 }
 
-export async function getCoursesByLevel(Id: string) {
+export async function getCoursesByLevel(session:any) {
+     //const session = await getSession(request.headers.get("cookie"));
+    //const stdSession = session.data.user.session;
     const student = await db.student.findFirst({
-        where: { id: Id },
-        include: {courses : true}
+        where: { id: session.id },
+        include: {
+            courses: {
+                include: {
+                    lecturers: {
+                        where: {
+                    session : session.session
+                }} , attendances : true
+            }
+        }}
     })
     if (!student) {
         throw new Response("Not Found", {
@@ -75,5 +86,7 @@ export async function getCoursesByLevel(Id: string) {
             level: student?.level
         }
     })
+
+    
     return { courses, student };
 };

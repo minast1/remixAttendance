@@ -1,5 +1,22 @@
-import { Course, Student } from "@prisma/client"
+import { Attendance, Course, Lecturer, Student } from "@prisma/client"
 import create from 'zustand'
+
+
+export type studentRelations = Student & {
+    courses: (Course & {
+        lecturers: Lecturer[];
+        attendances: Attendance[];
+    })[];
+}
+
+
+export type courseRelations = (Course & {
+        lecturers: Lecturer[];
+        attendances: Attendance[];
+    })
+
+
+
 
 type StudentStore = {
     user: (Student & {
@@ -14,7 +31,8 @@ type StudentStore = {
     setUser: (to:Student & {
     courses: Course[];
 }| null) => void
-   
+  
+    
     
 }
 // And it is going to work for both

@@ -8,11 +8,11 @@ import { addStudentCourses } from "~/controllers/studentController";
 
 export let loader: LoaderFunction = async ({ request }) => {
   // If the user is already authenticated redirect to /dashboard directl
-  const sessionId: any = await authenticator.isAuthenticated(request, {
+  const session: any = await authenticator.isAuthenticated(request, {
     failureRedirect: "/",
   });
-
-  return await getCoursesByLevel(sessionId.id as string);
+  console.log(session);
+  return await getCoursesByLevel(session);
 };
 
 export default function StudentRoute() {

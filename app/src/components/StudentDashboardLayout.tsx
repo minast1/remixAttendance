@@ -21,7 +21,12 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Stack from "@mui/material/Stack";
 import CourseSelector from "./students/CourseSelector";
-import { useStudentStore } from "~/lib/store";
+import {
+  courseRelations,
+  studentRelations,
+  useStudentStore,
+} from "~/lib/store";
+import { Course, Lecturer, Student } from "@prisma/client";
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -52,7 +57,11 @@ export default function StudentDashboardLayout({
 }) {
   const toggled = useStudentStore((state) => state.courseSelectoToggle);
   const setToggled = useStudentStore((state) => state.setToggle);
-  const { student } = useLoaderData();
+  const {
+    student,
+  }: {
+    student: studentRelations;
+  } = useLoaderData();
   const transition = useTransition();
 
   React.useEffect(() => {
@@ -100,9 +109,8 @@ export default function StudentDashboardLayout({
             <Grid item container spacing={5} xs={12} sm={12} md={9} lg={9}>
               <Grid item xs={12}>
                 <Alert severity="info" sx={{ mb: 3 }}>
-                  <AlertTitle>{`Welcome ${student?.name}`}</AlertTitle>
-                  {typeof student?.courses != "undefined" &&
-                  student?.courses.length > 0 ? (
+                  <AlertTitle>{`Welcome ${student.name}`}</AlertTitle>
+                  {student.courses.length > 0 ? (
                     <Box>
                       Toggle between <strong>Enter Attendance</strong> and{" "}
                       <strong>Edit Profile</strong> buttons to do so. Enter the
@@ -133,7 +141,7 @@ export default function StudentDashboardLayout({
                   )}
                 </Alert>
                 {toggled && <CourseSelector />}
-                <DashboardTable />
+                {student.courses.length > 0 && <DashboardTable />}
               </Grid>
               <Grid item xs={12}>
                 <Paper
