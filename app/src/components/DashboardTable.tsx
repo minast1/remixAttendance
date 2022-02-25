@@ -7,6 +7,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { useLoaderData } from "remix";
+import { studentRelations } from "~/lib/store";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -28,25 +30,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
-
 export default function DashboardTable() {
+  const { student }: { student: studentRelations } = useLoaderData();
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table" size="small">
@@ -60,15 +45,19 @@ export default function DashboardTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
+          {student.courses.map((row) => (
+            <StyledTableRow key={row.id}>
               <StyledTableCell component="th" scope="row">
-                {row.name}
+                {`${row.name} (${row.code}) `}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.calories}</StyledTableCell>
-              <StyledTableCell align="right">{row.fat}</StyledTableCell>
-              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="right">{row.protein}</StyledTableCell>
+              <StyledTableCell align="right">
+                {row.lecturers.length > 0 ? row.lecturers[0].name : "John Doe"}
+              </StyledTableCell>
+              <StyledTableCell align="right">0</StyledTableCell>
+              <StyledTableCell align="right">
+                {row.attendances.length}
+              </StyledTableCell>
+              <StyledTableCell align="right">50%</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>

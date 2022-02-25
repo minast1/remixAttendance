@@ -11,7 +11,7 @@ export let loader: LoaderFunction = async ({ request }) => {
   const session: any = await authenticator.isAuthenticated(request, {
     failureRedirect: "/",
   });
-  console.log(session);
+
   return await getCoursesByLevel(session);
 };
 
