@@ -1,0 +1,51 @@
+{
+  "name": "remix-with-typescript",
+  "version": "5.0.0",
+  "private": true,
+  "prisma": {
+    "seed": "node --require esbuild-register prisma/seed.ts"
+  },
+  "scripts": {
+    "build": "remix build",
+    "dev": "remix dev",
+    "postinstall": "remix setup node",
+    "start": "remix-serve build"
+  },
+  "dependencies": {
+    "@emotion/cache": "latest",
+    "@emotion/react": "latest",
+    "@emotion/server": "latest",
+    "@emotion/styled": "latest",
+    "@mui/icons-material": "^5.4.1",
+    "@mui/lab": "^5.0.0-alpha.69",
+    "@mui/material": "latest",
+    "@mui/x-data-grid": "^5.5.1",
+    "@prisma/client": "^3.9.2",
+    "@remix-run/react": "latest",
+    "@remix-run/serve": "latest",
+    "@remix-validated-form/with-zod": "^2.0.1",
+    "@types/bcrypt": "^5.0.0",
+    "bcrypt": "^5.0.1",
+    "react": "latest",
+    "react-dom": "latest",
+    "remix": "latest",
+    "remix-auth": "^3.2.1",
+    "remix-auth-form": "^1.1.1",
+    "remix-validated-form": "^4.1.2",
+    "zod": "^3.11.6",
+    "zustand": "^3.7.0"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^6.0.0-alpha.6",
+    "@remix-run/dev": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "esbuild-register": "^3.3.2",
+    "prisma": "^3.9.2",
+    "typescript": "latest"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "sideEffects": false
+}
