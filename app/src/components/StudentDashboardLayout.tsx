@@ -16,7 +16,7 @@ import Paper from "@mui/material/Paper";
 import ProfileCard from "./students/ProfileCard";
 import DashboardTable from "./DashboardTable";
 import Divider from "@mui/material/Divider";
-import { Link, useTransition } from "remix";
+import { Link, useLoaderData, useTransition } from "remix";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Stack from "@mui/material/Stack";
@@ -52,7 +52,7 @@ export default function StudentDashboardLayout({
 }) {
   const toggled = useStudentStore((state) => state.courseSelectoToggle);
   const setToggled = useStudentStore((state) => state.setToggle);
-  const user = useStudentStore((state) => state.user);
+  const { student } = useLoaderData();
   const transition = useTransition();
 
   React.useEffect(() => {
@@ -63,13 +63,7 @@ export default function StudentDashboardLayout({
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar>
-        <Toolbar
-          sx={
-            {
-              // pr: '24px', // keep right padding when drawer closed
-            }
-          }
-        >
+        <Toolbar>
           <Typography
             component="h1"
             variant="h6"
@@ -106,9 +100,9 @@ export default function StudentDashboardLayout({
             <Grid item container spacing={5} xs={12} sm={12} md={9} lg={9}>
               <Grid item xs={12}>
                 <Alert severity="info" sx={{ mb: 3 }}>
-                  <AlertTitle>{`Welcome ${user?.name}`}</AlertTitle>
-                  {typeof user?.courses != "undefined" &&
-                  user?.courses.length > 0 ? (
+                  <AlertTitle>{`Welcome ${student?.name}`}</AlertTitle>
+                  {typeof student?.courses != "undefined" &&
+                  student?.courses.length > 0 ? (
                     <Box>
                       Toggle between <strong>Enter Attendance</strong> and{" "}
                       <strong>Edit Profile</strong> buttons to do so. Enter the

@@ -3,9 +3,7 @@ import { Outlet, useLoaderData, json, useActionData } from "remix";
 import StudentDashboardLayout from "~/src/components/StudentDashboardLayout";
 import { ActionFunction, LoaderFunction } from "remix";
 import { authenticator } from "~/lib/auth.server";
-import { Student, Course } from "@prisma/client";
 import { getCoursesByLevel } from "~/controllers/courseController";
-import { useStudentStore } from "~/lib/store";
 import { addStudentCourses } from "~/controllers/studentController";
 
 export let loader: LoaderFunction = async ({ request }) => {
@@ -18,22 +16,6 @@ export let loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function StudentRoute() {
-  const {
-    student,
-    courses,
-  }: {
-    student: (Student & { courses: Course[] }) | null;
-    courses: Course[];
-  } = useLoaderData();
-
-  const setUser = useStudentStore((state) => state.setUser);
-  const setCourses = useStudentStore((state) => state.setCourses);
-
-  React.useEffect(() => {
-    setUser(student);
-    setCourses(courses);
-  }, [student, courses]);
-
   return (
     <StudentDashboardLayout>
       <Outlet />

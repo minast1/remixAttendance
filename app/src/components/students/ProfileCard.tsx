@@ -7,12 +7,11 @@ import Paper from "@mui/material/Paper";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
-import { useStudentStore } from "~/lib/store";
-import { useFetcher } from "remix";
+import { useFetcher, useLoaderData } from "remix";
 
 export default function ProfileCard() {
   const fetcher = useFetcher();
-  const student = useStudentStore.getState().user;
+  const { student } = useLoaderData();
 
   return (
     <>

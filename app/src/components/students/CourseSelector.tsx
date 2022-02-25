@@ -6,18 +6,18 @@ import FormControl from "@mui/material/FormControl";
 import Paper from "@mui/material/Paper";
 import FormGroup from "@mui/material/FormGroup";
 import FormHelperText from "@mui/material/FormHelperText";
-import { Form, useTransition } from "remix";
+import { Form, useLoaderData, useTransition } from "remix";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { useMediaQuery, useTheme } from "@mui/material";
-import { useStudentStore } from "~/lib/store";
+import { Course } from "@prisma/client";
 
 const CourseSelector = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const courses = useStudentStore((state) => state.courses);
   const transition = useTransition();
   const [total, setTotal] = React.useState(0);
+  const { courses } = useLoaderData();
 
   return (
     <Paper
@@ -50,7 +50,7 @@ const CourseSelector = () => {
           fullWidth
         >
           <FormGroup>
-            {courses.map((course) => (
+            {courses.map((course: Course) => (
               <FormControlLabel
                 key={course.id}
                 control={
