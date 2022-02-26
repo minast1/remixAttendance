@@ -21,12 +21,7 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Stack from "@mui/material/Stack";
 import CourseSelector from "./students/CourseSelector";
-import {
-  courseRelations,
-  studentRelations,
-  useStudentStore,
-} from "~/lib/store";
-import { Course, Lecturer, Student } from "@prisma/client";
+import { useStudentStore } from "~/lib/store";
 import { StudenType } from "~/controllers/courseController";
 
 interface AppBarProps extends MuiAppBarProps {
