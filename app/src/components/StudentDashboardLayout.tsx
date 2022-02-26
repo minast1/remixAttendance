@@ -27,6 +27,7 @@ import {
   useStudentStore,
 } from "~/lib/store";
 import { Course, Lecturer, Student } from "@prisma/client";
+import { StudenType } from "~/controllers/courseController";
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -57,13 +58,9 @@ export default function StudentDashboardLayout({
 }) {
   const toggled = useStudentStore((state) => state.courseSelectoToggle);
   const setToggled = useStudentStore((state) => state.setToggle);
-  const {
-    student,
-  }: {
-    student: studentRelations;
-  } = useLoaderData();
+  const data = useLoaderData<StudenType>();
   const transition = useTransition();
-
+  const { student } = data;
   React.useEffect(() => {
     toggled && setToggled(false);
   }, [transition.state === "loading"]);

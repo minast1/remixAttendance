@@ -19,6 +19,13 @@ export const courseValidator = withZod(
   })
 );
 
+export const lecturerSignInValidator = withZod(
+  z.object({
+    email: z.string().nonempty("* This field is required").email({ message: "Please enter a valid email address" }),
+    password: z.string().nonempty(" * This field is required")
+  })
+)
+
 export const studentValidator = withZod(
   z.object({
     indexnumber: z.string().nonempty({message: "Please Enter a Valid Index Number"})

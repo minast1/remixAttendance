@@ -1,13 +1,13 @@
-import React from 'react'
-import { Outlet } from 'remix'
-import AdminLayout from '~/src/components/lecturers/AdminLayout'
+import React from "react";
+import { Outlet } from "remix";
+import AdminLayout from "~/src/components/lecturers/AdminLayout";
 
 const AdminRoute = () => {
   return (
-    <AdminLayout>
-       <Outlet/>
-   </AdminLayout>
-  )
-}
+    <React.Fragment>
+      <Outlet />
+    </React.Fragment>
+  );
+};
 
-export default AdminRoute
+export default AdminRoute;

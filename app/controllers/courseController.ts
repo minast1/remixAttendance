@@ -1,4 +1,4 @@
-import { Course, Level, Semester, Student } from "@prisma/client";
+import { Course, Level, Prisma, Semester, Student } from "@prisma/client";
 import { getSession } from "~/lib/session.server";
 import { db } from "../lib/db.server";
 
@@ -87,6 +87,9 @@ export async function getCoursesByLevel(session:any) {
         }
     })
 
-    
+     
     return { courses, student };
 };
+     
+  export  type StudenType = Prisma.PromiseReturnType<typeof getCoursesByLevel>
+ 

@@ -1,4 +1,4 @@
-import { Attendance, Course, Lecturer, Student } from "@prisma/client"
+import { Attendance, Course, Lecturer, Student, Prisma } from "@prisma/client"
 import create from 'zustand'
 
 

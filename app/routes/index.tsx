@@ -19,6 +19,7 @@ import { studentValidator } from "~/lib/constants";
 import { authenticator } from "~/lib/auth.server";
 import { commitSession, getSession } from "~/lib/session.server";
 import SubmitButton from "~/src/components/SubmitButton";
+import { Lecturer, Student } from "@prisma/client";
 
 export default function StudentLogin() {
   const { error } = useLoaderData();

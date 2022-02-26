@@ -6,9 +6,15 @@ import SxProps from "@mui/material/styles";
 type FormInputProps = {
   name: string;
   label: string;
+  type?: string;
   styles?: {};
 };
-export const FormInputText = ({ name, label, styles }: FormInputProps) => {
+export const FormInputText = ({
+  name,
+  label,
+  styles,
+  type,
+}: FormInputProps) => {
   const { error, getInputProps, defaultValue } = useField(name);
   const [value, setValue] = React.useState<any>(defaultValue);
 
@@ -20,6 +26,7 @@ export const FormInputText = ({ name, label, styles }: FormInputProps) => {
     <TextField
       helperText={error ? <span style={{ color: "red" }}>{error}</span> : null}
       error={error ? true : false}
+      type={type}
       key={defaultValue}
       size="small"
       {...getInputProps({ id: name })}
