@@ -31,7 +31,7 @@ import SubmitButton from "~/src/components/SubmitButton";
 
 export default function Enroll() {
   const { error } = useLoaderData();
-  console.log(error);
+
   const isSubmitting = useIsSubmitting("signUp");
   return (
     <Layout>

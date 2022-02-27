@@ -8,6 +8,7 @@ import { createNewStudent, loginStudent } from "~/controllers/studentController"
 import { serializeFormData } from '~/lib/constants';
 import { withZod } from "@remix-validated-form/with-zod";
 import { studentSignUpValidator } from '~/lib/constants';
+import { loginLecturer, registerNewLecturer } from "~/controllers/lecturerController";
 
 
 
@@ -16,37 +17,12 @@ export const  authenticator = new Authenticator<Lecturer | StudentSessionId | Ad
 
 
 
-type Credentials = {
-    email: any
-    password: any
-}
+
 
 type StudentSessionId = Pick<Student, "id">;
 
-const loginLecturer = async (credentials: Credentials) => {
-    const saltRounds = 10;
-    
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hash = bcrypt.hashSync(credentials.password, salt);
-    const lecturer = await db.lecturer.findFirst({
-        where: { email: credentials.email },
-    });
 
-    if (!lecturer) {
-        throw new Response("Invalid Credentials", {
-            status: 404
-        })
-    }
-    const crosscheckPassword = await bcrypt.compareSync(credentials.password, lecturer.password);
-
-    if (crosscheckPassword) {
-        return lecturer
-    } else {
-        throw new Response("Password is Invalid", { status: 404 })
-    }
-};
-
-const loginAdmin = async (credentials:Credentials) => {
+const loginAdmin = async (credentials:any) => {
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = bcrypt.hashSync(credentials.password, salt);
@@ -75,10 +51,16 @@ authenticator.use(
 );
 
 authenticator.use(
-    new FormStrategy(async ({ form }) => {
-        let email = form.get("email");
-        let password = form.get("password");
-        let lecturer: Lecturer = await loginLecturer({ email, password })
+    new FormStrategy(async ({ form }) => {   
+        let email = form.get("email") as string;
+        let password = form.get("password")as string;
+        let name = form.get("name")as string;
+        let courseId = form.get("course")as string
+        let session = form.get("session")as Session
+        
+        const lecturer = name ?
+            await registerNewLecturer({ email, password, name, courseId, session }) : 
+            await loginLecturer({email, password})
         return lecturer
     }),
     "lecturer"

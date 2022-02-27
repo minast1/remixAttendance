@@ -12,13 +12,25 @@ import Paper from "@mui/material/Paper";
 import theme from "~/src/theme";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
-import { Link } from "remix";
+import {
+  ActionFunction,
+  json,
+  Link,
+  LoaderFunction,
+  Session,
+  useLoaderData,
+} from "remix";
 import { FormInputText } from "~/src/components/FormInputText";
 import SubmitButton from "~/src/components/SubmitButton";
 import { ValidatedForm } from "remix-validated-form";
 import { lecturerSignInValidator } from "~/lib/constants";
+import { authenticator } from "~/lib/auth.server";
+import { commitSession, getSession } from "~/lib/session.server";
+import FormHelperText from "@mui/material/FormHelperText";
 
 const LecturerSignIn = () => {
+  const { error } = useLoaderData();
+
   return (
     <Container component="main" maxWidth="xs" sx={{ pt: 10 }}>
       <CssBaseline />
@@ -50,11 +62,16 @@ const LecturerSignIn = () => {
           component={ValidatedForm}
         >
           <FormInputText name="email" label="Email" />
+          {error && (
+            <FormHelperText sx={{ color: "red" }}>
+              {error.message}
+            </FormHelperText>
+          )}
           <FormInputText
             name="password"
             label="Password"
             type="password"
-            styles={{ mt: 4 }}
+            styles={{ mt: 2 }}
           />
           <SubmitButton title="SignIn" formId="lecturer_signin" />
           <Grid container>
@@ -79,3 +96,25 @@ const LecturerSignIn = () => {
 };
 
 export default LecturerSignIn;
+
+export const loader: LoaderFunction = async ({ request }) => {
+  let session: Session = await getSession(request.headers.get("cookie"));
+  let error = session.get(authenticator.sessionErrorKey);
+  const data = json(
+    { error },
+    {
+      headers: {
+        // only necessary with cookieSessionStorage
+        "Set-Cookie": await commitSession(session),
+      },
+    }
+  );
+  return data;
+};
+
+export const action: ActionFunction = async ({ request, context }) => {
+  await authenticator.authenticate("lecturer", request, {
+    successRedirect: "/upsa/lecturer/dashboard",
+    failureRedirect: "/upsa/lecturer",
+  });
+};

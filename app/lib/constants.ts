@@ -26,12 +26,33 @@ export const lecturerSignInValidator = withZod(
   })
 )
 
+export const lecturerRegisterValidator = withZod(
+  z.object({
+    name: z.string().nonempty("* This field is required"),
+    email: z.string().nonempty("* This field is required").email({ message: "Please enter a valid email address" }),
+    password: z.string().nonempty(" * This field is required"),
+    confirm: z.string().nonempty("Please confirm the password"),
+    session: z.enum(sessions),
+    course: z.string().cuid({message : 'Please select one of the available courses'}),
+  }).refine((data) => data.password === data.confirm, {
+    message: "Passwords don't match", 
+    path: ["confirm"]
+  })
+)
+
+
 export const studentValidator = withZod(
   z.object({
     indexnumber: z.string().nonempty({message: "Please Enter a Valid Index Number"})
    })
 )
 
+export const lecturerAttendanceValidator = withZod(
+  z.object({
+    group: z.enum(groups),
+    date: z.date()
+  })
+)
 export const studentSignUpValidator = withZod(
   z.object({
     name : z.string().nonempty({message: "Name Field is Required"}),
