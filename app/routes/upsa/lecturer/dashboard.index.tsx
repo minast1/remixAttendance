@@ -42,8 +42,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 const LecturerDashboard = () => {
   const session: lecturerSessionData = useLoaderData();
-  const sheet: Attendance | undefined = useActionData();
-  console.log(sheet);
+
   //  const toggle = useLecturerStore((state) => state.Toggle);
   // const setToggle = useLecturerStore((state) => state.setToggle);
   const [toggle, setToggle] = React.useState<boolean>(false);
