@@ -10,16 +10,27 @@ import Typography from "@mui/material/Typography";
 import AttendanceForm from "~/src/components/lecturers/AttendanceForm";
 import RealtimeTable from "~/src/components/lecturers/RealtimeTable";
 import StudentsTable from "~/src/components/lecturers/StudentsTable";
-import { LoaderFunction, useLoaderData } from "remix";
+import {
+  ActionFunction,
+  LoaderFunction,
+  Session,
+  useActionData,
+  useLoaderData,
+} from "remix";
 import AdminLayout from "~/src/components/lecturers/AdminLayout";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { authenticator } from "~/lib/auth.server";
-import { Lecturer } from "@prisma/client";
+import { Attendance, Lecturer } from "@prisma/client";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { lecturerSessionData } from "~/controllers/lecturerController";
 import { useLecturerStore } from "~/lib/store";
+import { lecturerAttendanceValidator } from "~/lib/constants";
+import { validationError } from "remix-validated-form";
+import { getSession } from "~/lib/session.server";
+import { createAttendanceSheet } from "~/controllers/attendanceController";
+import AttendanceSheetModal from "~/src/components/lecturers/AttendanceSheetModal";
 
 export const loader: LoaderFunction = async ({ request }) => {
   let session = await authenticator.isAuthenticated(request, {
@@ -31,12 +42,15 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 const LecturerDashboard = () => {
   const session: lecturerSessionData = useLoaderData();
+  const sheet: Attendance | undefined = useActionData();
+  console.log(sheet);
   //  const toggle = useLecturerStore((state) => state.Toggle);
   // const setToggle = useLecturerStore((state) => state.setToggle);
   const [toggle, setToggle] = React.useState<boolean>(false);
   return (
     <AdminLayout>
       <Container maxWidth="lg" sx={{ mt: 10, mb: 4 }}>
+        <AttendanceSheetModal />
         <Alert severity="info">
           <AlertTitle>{`Welcome ${session.name} to the Lecturer Dashboard`}</AlertTitle>
           <Stack>
@@ -91,3 +105,16 @@ const LecturerDashboard = () => {
 };
 
 export default LecturerDashboard;
+
+export const action: ActionFunction = async ({ request }) => {
+  let session: Session = await getSession(request.headers.get("cookie"));
+  const result = await lecturerAttendanceValidator.validate(
+    await request.formData()
+  );
+  if (result.error) return validationError(result.error);
+
+  const { group, date } = result.data;
+  const { user } = session.data;
+
+  return await createAttendanceSheet({ user, group, date });
+};

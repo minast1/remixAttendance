@@ -56,12 +56,12 @@ model Attendance {
   id        String   @id @default(cuid())
   level     Level
   session   Session
-  createdAt DateTime @db.Date
+  createdAt DateTime @default(now())
   group     Group    @default(ONE)
   year      Int      @db.Int
   courseId  String
   course    Course   @relation(fields: [courseId], references: [id])
-  code      Int
+  code      String   @db.VarChar(10)
   students  Json?
 
   @@index([courseId])

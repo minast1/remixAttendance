@@ -11,7 +11,7 @@ type FormInputProps = {
 };
 export const FormInputDate = ({ name, label }: FormInputProps) => {
   const [value, setValue] = React.useState<Date | null>(new Date());
-  const { getInputProps } = useField(name);
+  const { error, getInputProps } = useField(name);
   const handleChange = (newValue: Date | null) => {
     setValue(newValue);
   };
@@ -25,6 +25,10 @@ export const FormInputDate = ({ name, label }: FormInputProps) => {
         renderInput={(params) => (
           <TextField
             {...params}
+            helperText={
+              error ? <span style={{ color: "red" }}>{error}</span> : null
+            }
+            error={error ? true : false}
             size="small"
             {...getInputProps({ id: name })}
           />

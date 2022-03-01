@@ -50,7 +50,7 @@ export const studentValidator = withZod(
 export const lecturerAttendanceValidator = withZod(
   z.object({
     group: z.enum(groups),
-    date: z.date()
+    date: z.string()
   })
 )
 export const studentSignUpValidator = withZod(

@@ -1,4 +1,4 @@
-import { Student, Course } from '@prisma/client';
+import { Student, Course, Prisma } from '@prisma/client';
 import { db } from '~/lib/db.server';
 import { getSession } from '~/lib/session.server';
 
