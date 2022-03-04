@@ -13,6 +13,9 @@ import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import { StyledTableCell, StyledTableRow } from "../DashboardTable";
+import Stack from "@mui/material/Stack";
+import { useFetcher, useLoaderData } from "remix";
+import { lecturerWithInfo } from "~/controllers/lecturerController";
 
 function createData(name: string, index: number, status: string) {
   return { name, index, status };
@@ -20,36 +23,43 @@ function createData(name: string, index: number, status: string) {
 let current = new Date();
 const rows = [
   createData("Giannis Antethokoumpo", 10094966, current.toLocaleTimeString()),
-  createData(
-    "Asampana Busia Chief Kofi",
-    10094967,
-    current.toLocaleTimeString()
-  ),
+  createData("Lorenzo Insigne", 10094967, current.toLocaleTimeString()),
   createData("Zlatan Ibrahimovic", 10094968, current.toLocaleTimeString()),
   createData("Bogdan Bogdanovich", 10094953, current.toLocaleTimeString()),
-  createData("Marcus Rashford", 1004453323, current.toLocaleTimeString()),
+  createData("Dusan Vlahovic", 1004453323, current.toLocaleTimeString()),
   createData(
     "Asampana Busia Chief Kofi",
     10094967,
     current.toLocaleTimeString()
   ),
-  createData("Sadio Mane", 10094968, current.toLocaleTimeString()),
-  createData("Mohammed Salah", 10094953, current.toLocaleTimeString()),
-  createData("Marcus Rashford", 1004453323, current.toLocaleTimeString()),
+
   createData(
-    "Asampana Busia Chief Kofi",
-    10094967,
+    "Young Venegor of Hesling",
+    1004453323,
     current.toLocaleTimeString()
   ),
+  createData("Trent Alexander Arnold", 10094967, current.toLocaleTimeString()),
   createData("Sadio Mane", 10094968, current.toLocaleTimeString()),
   createData("Mohammed Salah", 10094953, current.toLocaleTimeString()),
   createData("Marcus Rashford", 1004453323, current.toLocaleTimeString()),
 ];
 
 export default function RealtimeTable() {
+  const lecturer: lecturerWithInfo = useLoaderData();
+  //console.log(lecturer);
   return (
     <Card>
       <CardContent sx={{ borderTop: "1px solid lightgray" }}>
+        <Stack spacing={1} sx={{ mb: 1 }}>
+          <Typography>
+            Total Students: {lecturer.course?.students.length}
+          </Typography>
+          <Typography>
+            Total Present:{" "}
+            {0 /**filter through the attendances to get the current */}
+          </Typography>
+          <Typography>Total Absent: 0</Typography>
+        </Stack>
         <TableContainer
           component={Paper}
           sx={{ maxHeight: 360, overflow: "auto" }}

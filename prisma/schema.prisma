@@ -23,14 +23,15 @@ model Course {
 }
 
 model Student {
-  id          String   @id @default(cuid())
-  name        String   @db.VarChar(150)
-  indexnumber String   @unique
-  createdAt   DateTime @default(now())
+  id          String                  @id @default(cuid())
+  name        String                  @db.VarChar(150)
+  indexnumber String                  @unique
+  createdAt   DateTime                @default(now())
   courses     Course[]
-  group       Group    @default(ONE)
+  group       Group                   @default(ONE)
   level       Level
   session     Session
+  attendances StudentsInAttendances[]
 }
 
 model Lecturer {
@@ -53,18 +54,28 @@ model Admin {
 }
 
 model Attendance {
-  id        String   @id @default(cuid())
+  id        String                  @id @default(cuid())
   level     Level
   session   Session
-  createdAt DateTime @default(now())
-  group     Group    @default(ONE)
-  year      Int      @db.Int
+  createdAt DateTime                @default(now())
+  group     Group                   @default(ONE)
+  year      Int                     @db.Int
   courseId  String
-  course    Course   @relation(fields: [courseId], references: [id])
-  code      String   @db.VarChar(10)
-  students  Json?
+  course    Course                  @relation(fields: [courseId], references: [id])
+  code      String                  @db.VarChar(10)
+  students  StudentsInAttendances[]
 
   @@index([courseId])
+}
+
+model StudentsInAttendances {
+  attendance   Attendance @relation(fields: [attendanceId], references: [id])
+  attendanceId String
+  student      Student    @relation(fields: [studentId], references: [id])
+  studentId    String
+  signedAt     DateTime   @default(now())
+
+  @@id([attendanceId, studentId])
 }
 
 enum Session {

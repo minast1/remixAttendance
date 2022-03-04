@@ -1,6 +1,6 @@
 import { db } from "~/lib/db.server";
 import type { lecturerSessionData } from "~/controllers/lecturerController";
-import { Group, Lecturer, Level,Course } from "@prisma/client";
+import { Group, Lecturer, Level,Course, Prisma } from "@prisma/client";
 import cuid from 'cuid';
 
 type LectureWithCourse =  Lecturer  & {course : Course}
@@ -20,7 +20,7 @@ export async function createAttendanceSheet(formData: funcType) {
     const courseId = formData.user.course.id 
     const id = cuid()
     const code = id.slice(-8);
-    const sheet = db.attendance.create({
+    const sheet = await db.attendance.create({
         data: {
             level: level,
             session: session,
@@ -28,8 +28,20 @@ export async function createAttendanceSheet(formData: funcType) {
             courseId: courseId,
             code: code,
             year: year
-            
+        },
+        include: {
+            students: {
+                include: {
+                    student : true
+                }
+            }
         }
+       
     });
+  
     return sheet;
 }
+
+
+
+export type AtttendanceType = Prisma.PromiseReturnType<typeof createAttendanceSheet>

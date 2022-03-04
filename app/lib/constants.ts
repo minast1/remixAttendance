@@ -73,4 +73,8 @@ export const serializeFormData = (formData: FormData):Omit<Student, "id" | "crea
   
 }
 
+export function toLowerCase(word: string): string {
+       return word.charAt(0)+word.slice(1).toLowerCase()
+}
+
 

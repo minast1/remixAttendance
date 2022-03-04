@@ -13,23 +13,32 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import FormHelperText from "@mui/material/FormHelperText";
 import { useLoaderData } from "remix";
-import { lecturerSessionData } from "~/controllers/lecturerController";
+import {
+  lecturerSessionData,
+  lecturerWithInfo,
+} from "~/controllers/lecturerController";
 import Typography from "@mui/material/Typography";
 import { FormInputDropdown } from "../FormInputDropdown";
 import { ValidatedForm } from "remix-validated-form";
 import { FormInputDate } from "../FormInputDate";
-import { lecturerAttendanceValidator } from "~/lib/constants";
+import { lecturerAttendanceValidator, toLowerCase } from "~/lib/constants";
 import SubmitButton from "../SubmitButton";
+import AttendanceTable from "./AttendanceTable";
 
 const AttendanceForm = () => {
-  const data = useLoaderData<lecturerSessionData>();
+  const lecturer: lecturerWithInfo = useLoaderData();
+
   const [toggle, setToggle] = React.useState(false);
   return (
     <Card>
       <CardHeader
         subheader={
-          <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-            {`NEW ATTENDANCE FOR ${data.course?.code} ${data.session} SESSION`}
+          <Typography sx={{ fontSize: 17 }}>
+            {`New Attendance for ${lecturer?.course?.code} ${
+              "Morning" /*toLowerCase(
+              lecturer?.session as string
+            )*/
+            } Session`}
           </Typography>
         }
       />
@@ -69,6 +78,9 @@ const AttendanceForm = () => {
               />
             </Box>
           </div>
+        </Box>
+        <Box sx={{ mt: 2 }}>
+          <AttendanceTable />
         </Box>
       </CardContent>
     </Card>

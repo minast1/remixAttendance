@@ -1,6 +1,8 @@
 import { Lecturer, Prisma } from '@prisma/client';
 import bcrypt from 'bcrypt'
+import { Session } from 'remix';
 import { db } from '~/lib/db.server';
+import { getSession } from '~/lib/session.server';
 
 
 type Credentials = {
@@ -10,14 +12,23 @@ type Credentials = {
 
 
 export const loginLecturer = async (credentials: Credentials) => {
-    const saltRounds = 10;
     
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hash = bcrypt.hashSync(credentials.password, salt);
     const lecturer = await db.lecturer.findFirst({
         where: { email: credentials.email },
-        include: {
-            course : true
+         include: {
+            course: {
+                include: {
+                    students: true,
+                    attendances: {
+                        where: {
+                            createdAt : new Date()
+                        },
+                        include: {
+                            students : true 
+                        }
+                    }
+                }
+            }
         }
     });
 
@@ -60,8 +71,20 @@ export const registerNewLecturer =async (formData: lecturerFormData) => {
             password: hash,
             courseId: formData.courseId
 
-        },include: {
-            course : true 
+        }, include: {
+            course: {
+                include: {
+                    students: true,
+                    attendances: {
+                        where: {
+                            createdAt : new Date()
+                        },
+                        include: {
+                            students : true 
+                        }
+                    }
+                }
+            }
         }
     });
     const { password, ...rest } = newLecturer;
@@ -70,13 +93,30 @@ export const registerNewLecturer =async (formData: lecturerFormData) => {
 
 export type lecturerSessionData = Prisma.PromiseReturnType<typeof registerNewLecturer>
 
-export const loginStudent = async (id: any) => {
-
-    const student = await db.student.findFirst({
-        where: { indexnumber: id }
+export const getSessionLecturerWithInfo = async (Id:string) => {
+     
+    const lect = await db.lecturer.findFirst({
+        where: {
+            id : Id
+        },
+        include: {
+            course: {
+                include: {
+                    students: true,
+                    attendances: {
+                        where: {
+                            createdAt : new Date()
+                        },
+                        include: {
+                            students : true 
+                        }
+                    }
+                }
+            }
+        }
     });
-    if (!student) {
-        throw new Error("Index Number is Invalid")
-    }
-    return student
+    if(!lect) throw new Error("Lecturer does not exist")
+    return lect;
 }
+
+export type lecturerWithInfo = Prisma.PromiseReturnType<typeof getSessionLecturerWithInfo>

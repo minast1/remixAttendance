@@ -7,9 +7,15 @@ import Avatar from "@mui/material/Avatar";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import CardActions from "@mui/material/CardActions";
-import IconButton, { IconButtonProps } from "@mui/material/IconButton";
-import Stack from "@mui/material/Stack";
 import RealtimeTable from "./RealtimeTable";
+import { useActionData, useLoaderData } from "remix";
+import { Attendance, Prisma } from "@prisma/client";
+import {
+  lecturerSessionData,
+  lecturerWithInfo,
+} from "~/controllers/lecturerController";
+import { toLowerCase } from "~/lib/constants";
+import { AtttendanceType } from "~/controllers/attendanceController";
 
 const style = {
   position: "absolute" as "absolute",
@@ -24,9 +30,17 @@ const style = {
 };
 
 export default function AttendanceSheetModal() {
-  const [open, setOpen] = React.useState(true);
+  const lecturer: lecturerWithInfo = useLoaderData();
+  const isNewAttendanceCreated = useActionData();
+  const [open, setOpen] = React.useState(false);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  React.useEffect(() => {
+    setOpen(!!isNewAttendanceCreated);
+    /*isNewAttendanceCreated && setToken(isNewAttendanceCreated.code)*/
+  }, [isNewAttendanceCreated]);
 
   return (
     <div>
@@ -51,31 +65,28 @@ export default function AttendanceSheetModal() {
             }
             title={
               <Typography variant="h6" sx={{ fontSize: 14 }}>
-                Attendance Sheet for BGEC102 Morning Session
+                Attendance Sheet for {lecturer?.course?.code}{" "}
+                {toLowerCase(lecturer?.session as string)} Session
               </Typography>
             }
-            subheader="September 14, 2016"
+            /*  subheader={
+              attendance && new Date(attendance.createdAt).toLocaleDateString()
+            }*/
           />
           <CardContent sx={{ borderTop: "1px solid lightgray" }}>
-            <Stack spacing={1}>
-              <Typography sx={{ fontWeight: "bold" }}>
-                Total Students: 50
-              </Typography>
-              <Typography sx={{ fontWeight: "bold" }}>
-                Total Present: 30
-              </Typography>
-              <Typography sx={{ fontWeight: "bold" }}>
-                Total Absent: 20
-              </Typography>
-            </Stack>
             <RealtimeTable />
           </CardContent>
           <CardActions>
             <Button size="small" variant="contained">
               Clear Entries
             </Button>
-            <Button size="small" variant="contained" color="error">
-              Delete Attendance
+            <Button
+              size="small"
+              variant="contained"
+              color="success"
+              onClick={() => setOpen(false)}
+            >
+              Close
             </Button>
           </CardActions>
         </Box>
