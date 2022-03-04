@@ -1,7 +1,6 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
-import IconButton from "@mui/material/IconButton";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -14,6 +13,7 @@ import Button from "@mui/material/Button";
 import { useLoaderData } from "remix";
 import { lecturerWithInfo } from "~/controllers/lecturerController";
 import { Attendance } from "@prisma/client";
+import { format } from "date-fns";
 
 function Row({ row, lect }: { row: Attendance; lect: string }) {
   const [open, setOpen] = React.useState(false);
@@ -42,7 +42,9 @@ function Row({ row, lect }: { row: Attendance; lect: string }) {
         <TableCell align="right">{row.code}</TableCell>
         <TableCell align="right">{row.session}</TableCell>
         <TableCell align="right">{row.group}</TableCell>
-        <TableCell align="right">{row.createdAt}</TableCell>
+        <TableCell align="right">
+          {format(new Date(row.createdAt), " p")}
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
