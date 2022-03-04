@@ -16,6 +16,8 @@ import { StyledTableCell, StyledTableRow } from "../DashboardTable";
 import Stack from "@mui/material/Stack";
 import { useFetcher, useLoaderData } from "remix";
 import { lecturerWithInfo } from "~/controllers/lecturerController";
+import { Attendance, Group, StudentsInAttendances } from "@prisma/client";
+import { AtttendanceType } from "~/controllers/attendanceController";
 
 function createData(name: string, index: number, status: string) {
   return { name, index, status };
@@ -44,21 +46,29 @@ const rows = [
   createData("Marcus Rashford", 1004453323, current.toLocaleTimeString()),
 ];
 
-export default function RealtimeTable() {
+export default function RealtimeTable({
+  attendance,
+}: {
+  attendance: Attendance & {
+    students: StudentsInAttendances[];
+  };
+}) {
   const lecturer: lecturerWithInfo = useLoaderData();
-  //console.log(lecturer);
+
+  const total = lecturer?.course?.students.filter(
+    (student) => student.group === attendance.group
+  );
   return (
     <Card>
       <CardContent sx={{ borderTop: "1px solid lightgray" }}>
         <Stack spacing={1} sx={{ mb: 1 }}>
+          <Typography>Total Students: {total?.length}</Typography>
+          <Typography>Total Present:{attendance.students.length}</Typography>
           <Typography>
-            Total Students: {lecturer.course?.students.length}
+            Total Absent:{" "}
+            {typeof total !== "undefined" &&
+              total?.length - attendance.students.length}
           </Typography>
-          <Typography>
-            Total Present:{" "}
-            {0 /**filter through the attendances to get the current */}
-          </Typography>
-          <Typography>Total Absent: 0</Typography>
         </Stack>
         <TableContainer
           component={Paper}
@@ -78,14 +88,14 @@ export default function RealtimeTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row, index) => (
+              {attendance.students.map((student, index) => (
                 <StyledTableRow
-                  key={row.name}
+                  key={student.studentId}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell align="left">{row.index}</TableCell>
-                  <TableCell align="left">{row.status}</TableCell>
+                  <TableCell>{"Edmond Marfo"}</TableCell>
+                  <TableCell align="left">{10094966}</TableCell>
+                  <TableCell align="left">{student.signedAt}</TableCell>
                 </StyledTableRow>
               ))}
             </TableBody>

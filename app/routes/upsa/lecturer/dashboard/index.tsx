@@ -24,10 +24,10 @@ import { lecturerAttendanceValidator } from "~/lib/constants";
 import { validationError } from "remix-validated-form";
 import { getSession } from "~/lib/session.server";
 import { createAttendanceSheet } from "~/controllers/attendanceController";
-import AttendanceSheetModal from "~/src/components/lecturers/AttendanceSheetModal";
 import { db } from "~/lib/db.server";
 import startOfDay from "date-fns/startOfDay";
 import { endOfDay } from "date-fns";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 export let loader: LoaderFunction = async ({ request }) => {
   const auth_session = await getSession(request.headers.get("cookie"));
@@ -55,7 +55,11 @@ export let loader: LoaderFunction = async ({ request }) => {
               session: { equals: session },
             },
             include: {
-              students: true,
+              students: {
+                include: {
+                  student: true,
+                },
+              },
             },
           },
         },
@@ -67,11 +71,11 @@ export let loader: LoaderFunction = async ({ request }) => {
 
 const LecturerDashboard = () => {
   const lecturer: lecturerWithInfo = useLoaderData();
-  console.log(lecturer);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [toggle, setToggle] = React.useState<boolean>(false);
   return (
     <Container maxWidth="lg" sx={{ mt: 10, mb: 4 }}>
-      <AttendanceSheetModal />
       <Alert severity="info">
         <AlertTitle>{`Welcome ${lecturer?.name} to the Lecturer Dashboard`}</AlertTitle>
         <Stack>
@@ -86,7 +90,11 @@ const LecturerDashboard = () => {
             size="small"
             variant="contained"
             onClick={() => setToggle(!toggle)}
-            sx={{ mt: 1, width: "20%" }}
+            sx={{
+              mt: 1,
+              width: isMobile ? "100%" : "20%",
+              textTransform: "capitalize",
+            }}
           >
             Create New Attendance
           </Button>

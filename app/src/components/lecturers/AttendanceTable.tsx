@@ -12,10 +12,30 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { useLoaderData } from "remix";
 import { lecturerWithInfo } from "~/controllers/lecturerController";
-import { Attendance } from "@prisma/client";
+import {
+  Attendance,
+  Course,
+  Lecturer,
+  Student,
+  StudentsInAttendances,
+} from "@prisma/client";
 import { format } from "date-fns";
+import Avatar from "@mui/material/Avatar";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import CardActions from "@mui/material/CardActions";
+import { toLowerCase } from "~/lib/constants";
+import RealtimeTable from "./RealtimeTable";
+import { AtttendanceType } from "~/controllers/attendanceController";
 
-function Row({ row, lect }: { row: Attendance; lect: string }) {
+type rowType = {
+  row: Attendance & {
+    students: StudentsInAttendances[];
+  };
+  lect: lecturerWithInfo;
+};
+
+function Row({ row, lect }: rowType) {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -37,7 +57,7 @@ function Row({ row, lect }: { row: Attendance; lect: string }) {
           </Button>
         </TableCell>
         <TableCell component="th" scope="row">
-          {lect}
+          {lect?.name}
         </TableCell>
         <TableCell align="right">{row.code}</TableCell>
         <TableCell align="right">{row.session}</TableCell>
@@ -49,21 +69,39 @@ function Row({ row, lect }: { row: Attendance; lect: string }) {
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                History
-              </Typography>
-              <Table size="small" aria-label="purchases">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Customer</TableCell>
-                    <TableCell align="right">Amount</TableCell>
-                    <TableCell align="right">Total price ($)</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>The attendance conmes here</TableBody>
-              </Table>
+            <Box
+              sx={{
+                // margin: 1,
+                bgcolor: "background.paper",
+              }}
+            >
+              <CardHeader
+                avatar={
+                  <Avatar
+                    src="/itsa.jpg"
+                    aria-label="logo"
+                    alt="ItsaLogo"
+                    sx={{ width: 90, height: 90 }}
+                  >
+                    R
+                  </Avatar>
+                }
+                title={
+                  <Typography variant="h6" sx={{ fontSize: 16 }}>
+                    Attendance Sheet for {lect?.course?.code}{" "}
+                    {toLowerCase(row.session)} Session
+                  </Typography>
+                }
+                subheader={new Date(row.createdAt).toLocaleDateString()}
+              />
+              <CardContent sx={{ borderTop: "1px solid lightgray" }}>
+                <RealtimeTable attendance={row} />
+              </CardContent>
+              <CardActions>
+                <Button size="small" variant="contained">
+                  Clear Entries
+                </Button>
+              </CardActions>
             </Box>
           </Collapse>
         </TableCell>
@@ -74,7 +112,7 @@ function Row({ row, lect }: { row: Attendance; lect: string }) {
 
 export default function AttendanceTable() {
   const data: lecturerWithInfo = useLoaderData();
-  const rows: Attendance[] | undefined = data.course?.attendances;
+  const rows = data?.course?.attendances;
 
   return (
     <TableContainer
@@ -86,7 +124,7 @@ export default function AttendanceTable() {
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell> Attd. Lecturer</TableCell>
+            <TableCell> Course Lecturer</TableCell>
             <TableCell align="right">Verification Code</TableCell>
             <TableCell align="right">Session</TableCell>
             <TableCell align="right">Group</TableCell>
@@ -95,7 +133,7 @@ export default function AttendanceTable() {
         </TableHead>
         <TableBody>
           {rows?.map((row) => (
-            <Row key={row.id} row={row} lect={data.name} />
+            <Row key={row.id} row={row} lect={data} />
           ))}
         </TableBody>
       </Table>

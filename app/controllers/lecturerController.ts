@@ -3,7 +3,8 @@ import bcrypt from 'bcrypt'
 import { Session } from 'remix';
 import { db } from '~/lib/db.server';
 import { getSession } from '~/lib/session.server';
-
+import startOfDay from "date-fns/startOfDay";
+import { endOfDay } from "date-fns";
 
 type Credentials = {
     email: string
@@ -93,30 +94,41 @@ export const registerNewLecturer =async (formData: lecturerFormData) => {
 
 export type lecturerSessionData = Prisma.PromiseReturnType<typeof registerNewLecturer>
 
-export const getSessionLecturerWithInfo = async (Id:string) => {
+export const getSessionLecturerWithInfo = async (Id: string) => {
      
-    const lect = await db.lecturer.findFirst({
-        where: {
-            id : Id
-        },
+    const start = startOfDay(new Date());
+     const end = endOfDay(new Date())
+
+     const lecturer = await db.lecturer.findFirst({
+    where: {
+      id: Id,
+    },
+    include: {
+      course: {
         include: {
-            course: {
+          students: true,
+          attendances: {
+            where: {
+              createdAt: {
+                gte: start,
+                lt: end,
+              },
+              session: { equals: "MORNING" },
+            },
+            include: {
+              students: {
                 include: {
-                    students: true,
-                    attendances: {
-                        where: {
-                            createdAt : new Date()
-                        },
-                        include: {
-                            students : true 
-                        }
-                    }
-                }
-            }
-        }
-    });
-    if(!lect) throw new Error("Lecturer does not exist")
-    return lect;
+                  student: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  return lecturer;
 }
 
 export type lecturerWithInfo = Prisma.PromiseReturnType<typeof getSessionLecturerWithInfo>
+

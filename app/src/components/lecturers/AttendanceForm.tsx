@@ -24,6 +24,7 @@ import { FormInputDate } from "../FormInputDate";
 import { lecturerAttendanceValidator, toLowerCase } from "~/lib/constants";
 import SubmitButton from "../SubmitButton";
 import AttendanceTable from "./AttendanceTable";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 const AttendanceForm = () => {
   const lecturer: lecturerWithInfo = useLoaderData();
@@ -74,14 +75,13 @@ const AttendanceForm = () => {
               <SubmitButton
                 title="Submit"
                 formId="attendance"
-                styles={{ width: "10%" }}
+                styles={{ width: "10%", textTransform: "capitalize" }}
               />
             </Box>
           </div>
         </Box>
-        <Box sx={{ mt: 2 }}>
-          <AttendanceTable />
-        </Box>
+
+        <AttendanceTable />
       </CardContent>
     </Card>
   );
