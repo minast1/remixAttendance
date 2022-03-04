@@ -2,21 +2,10 @@ import React from "react";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
 import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import FormHelperText from "@mui/material/FormHelperText";
 import { useLoaderData } from "remix";
-import {
-  lecturerSessionData,
-  lecturerWithInfo,
-} from "~/controllers/lecturerController";
+import { lecturerWithInfo } from "~/controllers/lecturerController";
 import Typography from "@mui/material/Typography";
 import { FormInputDropdown } from "../FormInputDropdown";
 import { ValidatedForm } from "remix-validated-form";
@@ -24,22 +13,19 @@ import { FormInputDate } from "../FormInputDate";
 import { lecturerAttendanceValidator, toLowerCase } from "~/lib/constants";
 import SubmitButton from "../SubmitButton";
 import AttendanceTable from "./AttendanceTable";
-import { useMediaQuery, useTheme } from "@mui/material";
+//import { useMediaQuery, useTheme } from "@mui/material";
 
 const AttendanceForm = () => {
   const lecturer: lecturerWithInfo = useLoaderData();
 
-  const [toggle, setToggle] = React.useState(false);
   return (
     <Card>
       <CardHeader
         subheader={
           <Typography sx={{ fontSize: 17 }}>
-            {`New Attendance for ${lecturer?.course?.code} ${
-              "Morning" /*toLowerCase(
+            {`New Attendance for ${lecturer?.course?.code} ${toLowerCase(
               lecturer?.session as string
-            )*/
-            } Session`}
+            )} Session`}
           </Typography>
         }
       />

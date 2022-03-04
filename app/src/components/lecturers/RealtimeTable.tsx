@@ -11,10 +11,9 @@ import CardContent from "@mui/material/CardContent";
 import Card from "@mui/material/Card";
 import { StyledTableCell, StyledTableRow } from "../DashboardTable";
 import Stack from "@mui/material/Stack";
-import { useFetcher, useLoaderData } from "remix";
+import { useLoaderData } from "remix";
 import { lecturerWithInfo } from "~/controllers/lecturerController";
-import { Attendance, Group, StudentsInAttendances } from "@prisma/client";
-import { AtttendanceType } from "~/controllers/attendanceController";
+import { Attendance } from "@prisma/client";
 import { format } from "date-fns";
 
 export default function RealtimeTable({
@@ -40,10 +39,14 @@ export default function RealtimeTable({
     <Card>
       <CardContent sx={{ borderTop: "1px solid lightgray" }}>
         <Stack spacing={1} sx={{ mb: 1 }}>
-          <Typography>Total Students: {total?.length}</Typography>
-          <Typography>Total Present:{attendance.students.length}</Typography>
-          <Typography>
-            Total Absent:{" "}
+          <Typography sx={{ fontSize: 15, color: "black" }}>
+            Total Students In Group: {total?.length}
+          </Typography>
+          <Typography sx={{ fontSize: 15, color: "black" }}>
+            Total Students Present: {attendance.students.length}
+          </Typography>
+          <Typography sx={{ fontSize: 15, color: "black" }}>
+            Total Students Absent:{" "}
             {typeof total !== "undefined" &&
               total?.length - attendance.students.length}
           </Typography>
@@ -66,7 +69,7 @@ export default function RealtimeTable({
               </TableRow>
             </TableHead>
             <TableBody>
-              {attendance.students?.map((item, index) => (
+              {attendance.students?.map((item) => (
                 <StyledTableRow
                   key={item.student.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

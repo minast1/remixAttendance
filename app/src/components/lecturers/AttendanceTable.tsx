@@ -12,13 +12,7 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { useLoaderData } from "remix";
 import { lecturerWithInfo } from "~/controllers/lecturerController";
-import {
-  Attendance,
-  Course,
-  Lecturer,
-  Student,
-  StudentsInAttendances,
-} from "@prisma/client";
+import { Attendance } from "@prisma/client";
 import { format } from "date-fns";
 import Avatar from "@mui/material/Avatar";
 import CardContent from "@mui/material/CardContent";
@@ -26,7 +20,6 @@ import CardHeader from "@mui/material/CardHeader";
 import CardActions from "@mui/material/CardActions";
 import { toLowerCase } from "~/lib/constants";
 import RealtimeTable from "./RealtimeTable";
-import { AtttendanceType } from "~/controllers/attendanceController";
 
 type rowType = {
   row: Attendance & {
@@ -99,7 +92,7 @@ function Row({ row, lect }: rowType) {
                     {toLowerCase(row.session)} Session
                   </Typography>
                 }
-                subheader={new Date(row.createdAt).toLocaleDateString()}
+                subheader={format(new Date(row.createdAt), "PPPP")}
               />
               <CardContent sx={{ borderTop: "1px solid lightgray" }}>
                 <RealtimeTable attendance={row} />

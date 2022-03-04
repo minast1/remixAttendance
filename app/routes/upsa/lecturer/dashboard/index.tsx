@@ -1,6 +1,5 @@
 import React from "react";
 import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
@@ -8,7 +7,6 @@ import CardActions from "@mui/material/CardActions";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import AttendanceForm from "~/src/components/lecturers/AttendanceForm";
-import RealtimeTable from "~/src/components/lecturers/RealtimeTable";
 import StudentsTable from "~/src/components/lecturers/StudentsTable";
 import { ActionFunction, LoaderFunction, useLoaderData } from "remix";
 import Alert from "@mui/material/Alert";
@@ -33,7 +31,6 @@ export let loader: LoaderFunction = async ({ request }) => {
   const user = auth_session.get("user");
   const { id, session } = user;
   // console.log(id);
-
   const result = await db.lecturer.findFirst({
     where: {
       id: id,
@@ -142,7 +139,7 @@ export const action: ActionFunction = async ({ request }) => {
   if (result.error) return validationError(result.error);
 
   const { group, date } = result.data;
-  const { user } = session.data;
+  const user = session.get("user");
 
   return await createAttendanceSheet({ user, group, date });
 };
