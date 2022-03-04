@@ -1,6 +1,6 @@
 import { db } from "~/lib/db.server";
 import type { lecturerSessionData } from "~/controllers/lecturerController";
-import { Group, Lecturer, Level,Course, Prisma } from "@prisma/client";
+import { Group, Lecturer, Level,Course, Prisma, prisma } from "@prisma/client";
 import cuid from 'cuid';
 
 type LectureWithCourse =  Lecturer  & {course : Course}
@@ -42,6 +42,22 @@ export async function createAttendanceSheet(formData: funcType) {
     return sheet;
 }
 
-
+export const validateStudentAttendance = async (code : string, Id:string) => {
+    const attendance = await db.attendance.findFirst({
+        where: {
+            code: code
+        }
+    });
+    if (attendance) {
+         const updateAttendanceStudents = await db.studentsInAttendances.create({
+             data: {
+                 attendanceId: attendance.id,
+                 studentId: Id,
+                 signedAt : new Date()
+         }
+    })
+    }
+   
+}
 
 export type AtttendanceType = Prisma.PromiseReturnType<typeof createAttendanceSheet>

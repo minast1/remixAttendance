@@ -1,6 +1,5 @@
-import { Lecturer, Prisma } from '@prisma/client';
+import { Lecturer, Prisma, Session } from '@prisma/client';
 import bcrypt from 'bcrypt'
-import { Session } from 'remix';
 import { db } from '~/lib/db.server';
 import { getSession } from '~/lib/session.server';
 import startOfDay from "date-fns/startOfDay";
@@ -94,7 +93,7 @@ export const registerNewLecturer =async (formData: lecturerFormData) => {
 
 export type lecturerSessionData = Prisma.PromiseReturnType<typeof registerNewLecturer>
 
-export const getSessionLecturerWithInfo = async (Id: string) => {
+export const getLecturerWithInfo = async (Id: string, session:Session) => {
      
     const start = startOfDay(new Date());
      const end = endOfDay(new Date())
@@ -113,12 +112,15 @@ export const getSessionLecturerWithInfo = async (Id: string) => {
                 gte: start,
                 lt: end,
               },
-              session: { equals: "MORNING" },
+              session: { equals: session },
             },
             include: {
               students: {
-                include: {
-                  student: true,
+                select: {
+                  student: {
+                    select: { id: true, indexnumber: true, name: true },
+                  },
+                  signedAt: true,
                 },
               },
             },
@@ -130,5 +132,5 @@ export const getSessionLecturerWithInfo = async (Id: string) => {
   return lecturer;
 }
 
-export type lecturerWithInfo = Prisma.PromiseReturnType<typeof getSessionLecturerWithInfo>
+export type lecturerWithInfo = Prisma.PromiseReturnType<typeof getLecturerWithInfo>
 

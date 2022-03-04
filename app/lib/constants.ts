@@ -63,6 +63,12 @@ export const studentSignUpValidator = withZod(
   })
 )
 
+export const studentAttendanceValidator = withZod(
+  z.object({
+    code: z.string().nonempty({message: "Please Enter the Attendance Code"})
+  })
+)
+
 export const serializeFormData = (formData: FormData):Omit<Student, "id" | "createdAt"> => {
   let data: any = {};
 

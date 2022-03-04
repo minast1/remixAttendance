@@ -30,7 +30,14 @@ import { AtttendanceType } from "~/controllers/attendanceController";
 
 type rowType = {
   row: Attendance & {
-    students: StudentsInAttendances[];
+    students: {
+      signedAt: Date;
+      student: {
+        id: string;
+        name: string;
+        indexnumber: string;
+      };
+    }[];
   };
   lect: lecturerWithInfo;
 };
