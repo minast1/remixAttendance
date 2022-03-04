@@ -15,6 +15,7 @@ import { useLoaderData } from "remix";
 import { lecturerWithInfo } from "~/controllers/lecturerController";
 import { Attendance } from "@prisma/client";
 import { format } from "date-fns";
+import Chip from "@mui/material/Chip";
 
 export default function RealtimeTable({
   attendance,
@@ -39,17 +40,48 @@ export default function RealtimeTable({
     <Card>
       <CardContent sx={{ borderTop: "1px solid lightgray" }}>
         <Stack spacing={1} sx={{ mb: 1 }}>
-          <Typography sx={{ fontSize: 15, color: "black" }}>
-            Total Students In Group: {total?.length}
-          </Typography>
-          <Typography sx={{ fontSize: 15, color: "black" }}>
-            Total Students Present: {attendance.students.length}
-          </Typography>
-          <Typography sx={{ fontSize: 15, color: "black" }}>
-            Total Students Absent:{" "}
-            {typeof total !== "undefined" &&
-              total?.length - attendance.students.length}
-          </Typography>
+          <Chip
+            size="small"
+            variant="outlined"
+            sx={{ width: "45%" }}
+            label={
+              <Typography sx={{ fontSize: 15, color: "black" }}>
+                Total Students In Group :{" "}
+                <span style={{ fontWeight: "bold" }}>{total?.length}</span>
+              </Typography>
+            }
+            color="primary"
+          />
+          <Chip
+            size="small"
+            variant="outlined"
+            sx={{ width: "45%" }}
+            label={
+              <Typography sx={{ fontSize: 15, color: "black" }}>
+                Total Students Present:{" "}
+                <span style={{ fontWeight: "bold" }}>
+                  {attendance.students.length}
+                </span>
+              </Typography>
+            }
+            color="success"
+          />
+          {typeof total !== "undefined" && (
+            <Chip
+              size="small"
+              variant="outlined"
+              sx={{ width: "45%" }}
+              label={
+                <Typography sx={{ fontSize: 15, color: "black" }}>
+                  Total Students Absent:{" "}
+                  <span style={{ fontWeight: "bold" }}>
+                    {total?.length - attendance.students.length}
+                  </span>
+                </Typography>
+              }
+              color="error"
+            />
+          )}
         </Stack>
         <TableContainer
           component={Paper}
