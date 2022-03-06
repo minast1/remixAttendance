@@ -2044,6 +2044,11 @@ internal-slot@^1.0.3:
     has "^1.0.3"
     side-channel "^1.0.4"
 
+ip-regex@^4.0.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/ip-regex/-/ip-regex-4.3.0.tgz#687275ab0f57fa76978ff8f4dddc8a23d5990db5"
+  integrity sha512-B9ZWJxHHOHUhUjCPrMpLD4xEq35bUTClHM1S6CBU5ixQnkZmwipwgc96vAd7AAGM9TGHvJR+Uss+/Ak6UphK+Q==
+
 ipaddr.js@1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.9.1.tgz#bff38543eeb8984825079ff3a2a8e6cbd46781b3"
@@ -2154,6 +2159,13 @@ is-hexadecimal@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/is-hexadecimal/-/is-hexadecimal-2.0.1.tgz#86b5bf668fca307498d319dfc03289d781a90027"
   integrity sha512-DgZQp241c8oO6cA1SbTEWiXeoxV42vlcJxgH+B3hi1AiqqKruZR3ZGF8In3fj4+/y/7rHvlOZLZtgJ/4ttYGZg==
+
+is-ip@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/is-ip/-/is-ip-3.1.0.tgz#2ae5ddfafaf05cb8008a62093cf29734f657c5d8"
+  integrity sha512-35vd5necO7IitFPjd/YBeqwWnyDWbuLH9ZXQdMfDA8TEo7pv5X8yfrvVO3xbJbLUlERCMvf6X0hTUamQxCYJ9Q==
+  dependencies:
+    ip-regex "^4.0.0"
 
 is-negative-zero@^2.0.1:
   version "2.0.2"
@@ -3463,6 +3475,15 @@ remix-utils@^2.2.0:
   resolved "https://registry.yarnpkg.com/remix-utils/-/remix-utils-2.5.0.tgz#3a22c2650d091ba563686061188e92c4f6676dd9"
   integrity sha512-zEVjJRWzCjG4il5W3zV9OFOVigaCcUCDzQtmxMOGbfoBKRtvP0D4X10wDuZ5+rTLw2zBOBEIJ1ySAtcWpxbDVA==
   dependencies:
+    type-fest "^2.5.2"
+    uuid "^8.3.2"
+
+remix-utils@^2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/remix-utils/-/remix-utils-2.7.0.tgz#4d5e598a0b04c108a1dc68840014d66ac3c00ef2"
+  integrity sha512-d6tjqK6EDeg08iJyXDsszXOMnSeY/RGeTCvZjVYnvDvU9DlzTsi/gDuFI0zBX5LWpXUKvGOqQq030SsOLTm/ZQ==
+  dependencies:
+    is-ip "^3.1.0"
     type-fest "^2.5.2"
     uuid "^8.3.2"
 

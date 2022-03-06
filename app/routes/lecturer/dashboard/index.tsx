@@ -11,8 +11,11 @@ import StudentsTable from "~/src/components/lecturers/StudentsTable";
 import {
   ActionFunction,
   LoaderFunction,
-  useFetcher,
+  useLocation,
   useLoaderData,
+  useTransition,
+  useFetcher,
+  useNavigate,
 } from "remix";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -27,6 +30,7 @@ import { db } from "~/lib/db.server";
 import startOfDay from "date-fns/startOfDay";
 import { endOfDay } from "date-fns";
 import { useMediaQuery, useTheme } from "@mui/material";
+import { useRevalidate } from "remix-utils";
 
 export let loader: LoaderFunction = async ({ request }) => {
   const auth_session = await getSession(request.headers.get("cookie"));

@@ -11,11 +11,13 @@ import CardContent from "@mui/material/CardContent";
 import Card from "@mui/material/Card";
 import { StyledTableCell, StyledTableRow } from "../DashboardTable";
 import Stack from "@mui/material/Stack";
-import { useLoaderData, useFetcher } from "remix";
+import { useLoaderData, useLocation } from "remix";
 import { lecturerWithInfo } from "~/controllers/lecturerController";
 import { Attendance } from "@prisma/client";
 import { format } from "date-fns";
 import Chip from "@mui/material/Chip";
+import { useRevalidate } from "remix-utils";
+//import { useLocation } from "react-router-dom";
 
 export default function RealtimeTable({
   attendance,
@@ -31,12 +33,21 @@ export default function RealtimeTable({
     }[];
   };
 }) {
-  React.useEffect(() => {}, [attendance.students]);
   // console.log(fetcher.data);
   const lecturer: lecturerWithInfo = useLoaderData();
   const total = lecturer?.course?.students.filter(
     (student) => student.group === attendance.group
   );
+  let revalidate = useRevalidate();
+  React.useEffect(() => {
+    let interval = setInterval(() => {
+      revalidate();
+    }, 3000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [revalidate]);
+
   return (
     <Card>
       <CardContent sx={{ borderTop: "1px solid lightgray" }}>
