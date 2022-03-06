@@ -8,7 +8,12 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import AttendanceForm from "~/src/components/lecturers/AttendanceForm";
 import StudentsTable from "~/src/components/lecturers/StudentsTable";
-import { ActionFunction, LoaderFunction, useLoaderData } from "remix";
+import {
+  ActionFunction,
+  LoaderFunction,
+  useFetcher,
+  useLoaderData,
+} from "remix";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Stack from "@mui/material/Stack";
@@ -71,6 +76,7 @@ const LecturerDashboard = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [toggle, setToggle] = React.useState<boolean>(false);
+
   return (
     <Container maxWidth="lg" sx={{ mt: 10, mb: 4 }}>
       <Alert severity="info">

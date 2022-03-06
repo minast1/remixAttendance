@@ -12,7 +12,7 @@ export const action: ActionFunction = async ({ request }) => {
             return await authenticator.logout(request, { redirectTo: "/" });
         }
         case "lecturer_signout": {
-            return await authenticator.logout(request, {redirectTo : '/upsa/lecturer'})
+            return await authenticator.logout(request, {redirectTo : '/lecturer'})
         }
         default: {
             throw new Error("Unexpected action");

@@ -114,7 +114,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const action: ActionFunction = async ({ request, context }) => {
   await authenticator.authenticate("lecturer", request, {
-    successRedirect: "/upsa/lecturer/dashboard",
-    failureRedirect: "/upsa/lecturer",
+    successRedirect: "/lecturer/dashboard",
+    failureRedirect: "/lecturer",
   });
 };

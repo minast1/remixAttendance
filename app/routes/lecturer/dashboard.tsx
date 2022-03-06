@@ -7,7 +7,7 @@ import { authenticator } from "~/lib/auth.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
   return await authenticator.isAuthenticated(request, {
-    failureRedirect: "/upsa/lecturer",
+    failureRedirect: "/lecturer",
   });
 };
 

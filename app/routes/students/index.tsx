@@ -6,7 +6,9 @@ import { authenticator } from "~/lib/auth.server";
 import { validationError } from "remix-validated-form";
 import { getSession } from "~/lib/session.server";
 import { studentAttendanceValidator } from "~/lib/constants";
-import { validateStudentAttendance } from "../../controllers/attendanceController";
+import { validateStudentAttendance } from "~/controllers/attendanceController";
+import { db } from "~/lib/db.server";
+//import { validateStudentAttendance } from "../../controllers/attendanceController";
 
 export default function Attendance() {
   return <AttendanceForm />;
@@ -30,6 +32,20 @@ export const action: ActionFunction = async ({ request }) => {
   if (result.error) return validationError(result.error);
   const { code } = result.data;
   const user = session.get("user");
-  const attd = await validateStudentAttendance(code, user.id);
-  return attd;
+  const attendance = await db.attendance.findFirst({
+    where: {
+      code: code,
+    },
+  });
+  if (attendance) {
+    const updateAttendanceStudents = await db.studentsInAttendances.create({
+      data: {
+        attendanceId: attendance.id,
+        studentId: user.id,
+        signedAt: new Date(),
+      },
+    });
+    return updateAttendanceStudents;
+  }
+  throw new Error("Attendance does not exist");
 };

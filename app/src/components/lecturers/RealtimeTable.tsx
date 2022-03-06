@@ -11,7 +11,7 @@ import CardContent from "@mui/material/CardContent";
 import Card from "@mui/material/Card";
 import { StyledTableCell, StyledTableRow } from "../DashboardTable";
 import Stack from "@mui/material/Stack";
-import { useLoaderData } from "remix";
+import { useLoaderData, useFetcher } from "remix";
 import { lecturerWithInfo } from "~/controllers/lecturerController";
 import { Attendance } from "@prisma/client";
 import { format } from "date-fns";
@@ -31,8 +31,9 @@ export default function RealtimeTable({
     }[];
   };
 }) {
+  React.useEffect(() => {}, [attendance.students]);
+  // console.log(fetcher.data);
   const lecturer: lecturerWithInfo = useLoaderData();
-
   const total = lecturer?.course?.students.filter(
     (student) => student.group === attendance.group
   );
