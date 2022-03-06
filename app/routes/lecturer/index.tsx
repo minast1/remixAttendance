@@ -82,7 +82,7 @@ const LecturerSignIn = () => {
             </Grid>
             <Grid item>
               <Link
-                to="/upsa/lecturer/register"
+                to="/lecturer/register"
                 style={{ color: "blue", fontSize: 13 }}
               >
                 {"Don't have an account? Sign Up"}

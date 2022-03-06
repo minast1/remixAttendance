@@ -111,7 +111,7 @@ const LecturerSignUp = () => {
           <Grid container>
             <Grid item xs></Grid>
             <Grid item>
-              <Link to="/upsa/lecturer" style={{ color: "blue", fontSize: 13 }}>
+              <Link to="/lecturer" style={{ color: "blue", fontSize: 13 }}>
                 {"Already have an account? Sign In"}
               </Link>
             </Grid>

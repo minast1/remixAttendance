@@ -11,13 +11,12 @@ import CardContent from "@mui/material/CardContent";
 import Card from "@mui/material/Card";
 import { StyledTableCell, StyledTableRow } from "../DashboardTable";
 import Stack from "@mui/material/Stack";
-import { useLoaderData, useLocation } from "remix";
+import { useLoaderData } from "remix";
 import { lecturerWithInfo } from "~/controllers/lecturerController";
 import { Attendance } from "@prisma/client";
 import { format } from "date-fns";
 import Chip from "@mui/material/Chip";
 import { useRevalidate } from "remix-utils";
-//import { useLocation } from "react-router-dom";
 
 export default function RealtimeTable({
   attendance,
@@ -51,14 +50,14 @@ export default function RealtimeTable({
   return (
     <Card>
       <CardContent sx={{ borderTop: "1px solid lightgray" }}>
-        <Stack spacing={1} sx={{ mb: 1 }}>
+        <Stack spacing={1} sx={{ mb: 1 }} direction="row">
           <Chip
             size="small"
-            variant="outlined"
-            sx={{ width: "45%" }}
+            //variant="outlined"
+            //sx={{ width: "45%" }}
             label={
-              <Typography sx={{ fontSize: 15, color: "black" }}>
-                Total Students In Group :{" "}
+              <Typography sx={{ fontSize: 15, color: "white" }}>
+                Total :{" "}
                 <span style={{ fontWeight: "bold" }}>{total?.length}</span>
               </Typography>
             }
@@ -66,32 +65,32 @@ export default function RealtimeTable({
           />
           <Chip
             size="small"
-            variant="outlined"
-            sx={{ width: "45%" }}
+            //variant="outlined"
+            // sx={{ width: "45%" }}
             label={
-              <Typography sx={{ fontSize: 15, color: "black" }}>
-                Total Students Present:{" "}
+              <Typography sx={{ fontSize: 15, color: "white" }}>
+                Present:{" "}
                 <span style={{ fontWeight: "bold" }}>
                   {attendance.students.length}
                 </span>
               </Typography>
             }
-            color="success"
+            color="primary"
           />
           {typeof total !== "undefined" && (
             <Chip
               size="small"
-              variant="outlined"
-              sx={{ width: "45%" }}
+              //variant="outlined"
+
               label={
-                <Typography sx={{ fontSize: 15, color: "black" }}>
-                  Total Students Absent:{" "}
+                <Typography sx={{ fontSize: 15, color: "white" }}>
+                  Absent:{" "}
                   <span style={{ fontWeight: "bold" }}>
                     {total?.length - attendance.students.length}
                   </span>
                 </Typography>
               }
-              color="error"
+              color="primary"
             />
           )}
         </Stack>
