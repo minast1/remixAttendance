@@ -4,11 +4,12 @@ import { getSession } from "~/lib/session.server";
 import { db } from "~/lib/db.server";
 import startOfDay from "date-fns/startOfDay";
 import { endOfDay } from "date-fns";
+import { Prisma } from "@prisma/client";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const auth_session = await getSession(request.headers.get("cookie"));
-  const start = startOfDay(new Date());
-  const end = endOfDay(new Date());
+  const date = new Date();
+  const year = date.getFullYear();
 
   const user = auth_session.get("user");
   const { id, session } = user;
@@ -17,25 +18,20 @@ export const loader: LoaderFunction = async ({ request }) => {
     where: {
       id: id,
     },
-    include: {
+    select: {
       course: {
         include: {
-          students: true,
           attendances: {
             where: {
-              createdAt: {
-                gte: start,
-                lt: end,
+              year: {
+                equals: year,
               },
               session: { equals: session },
             },
             include: {
               students: {
                 select: {
-                  student: {
-                    select: { id: true, indexnumber: true, name: true },
-                  },
-                  signedAt: true,
+                  student: true,
                 },
               },
             },
@@ -44,6 +40,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       },
     },
   });
+  if (!result) throw new Error("Not Found ");
 
   return result;
 };

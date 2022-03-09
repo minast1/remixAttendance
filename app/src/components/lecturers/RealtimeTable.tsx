@@ -32,16 +32,17 @@ export default function RealtimeTable({
     }[];
   };
 }) {
-  // console.log(fetcher.data);
   const lecturer: lecturerWithInfo = useLoaderData();
+
   const total = lecturer?.course?.students.filter(
     (student) => student.group === attendance.group
   );
   let revalidate = useRevalidate();
+
   React.useEffect(() => {
     let interval = setInterval(() => {
       revalidate();
-    }, 3000);
+    }, 5000);
     return () => {
       clearInterval(interval);
     };

@@ -60,7 +60,6 @@ const Document = withEmotionCache(
         </head>
         <body>
           {children}
-
           <Scripts />
           {process.env.NODE_ENV === "development" && <LiveReload />}
         </body>

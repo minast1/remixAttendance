@@ -133,4 +133,3 @@ export const getLecturerWithInfo = async (Id: string, session:Session) => {
 }
 
 export type lecturerWithInfo = Prisma.PromiseReturnType<typeof getLecturerWithInfo>
-

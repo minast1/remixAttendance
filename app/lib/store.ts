@@ -1,7 +1,6 @@
 import { Attendance, Student } from '@prisma/client'
-import create from 'zustand'
-import { persist } from "zustand/middleware"
-
+import create from 'zustand';
+import createContext from "zustand/context";
 
 type StudentStore = {
   
@@ -28,28 +27,16 @@ export const useLecturerStore = create<lecturerStore>(set => ({
 }))
 
 
-
-export type AttendanceWithStudentsType = (Attendance & {
-  students: {
-    signedAt: Date
-    student: Student
-  }[]
-})  
-
-
-
 type AttendanceStoreState = {
-  attendances: AttendanceWithStudentsType[] | [] ;
-  updateList: (attendance: AttendanceWithStudentsType)  => void
+  submissionId: number
+  updateId: ()  => void
 }
 
-export const useAttendanceStore = create<AttendanceStoreState>(persist(
-  (set, get) => ({
-    attendances: [],
-    updateList: (attendance) => set({attendances : [...get().attendances, attendance]})
+export const { Provider, useStore } = createContext<AttendanceStoreState>();
+
+export const attendanceStore = () =>  create<AttendanceStoreState>((set) => ({
+    submissionId: 0,
+    updateId: () => set((state) => ({ submissionId : state.submissionId + 1}))
   }),
-  {
-    name: "global_attendance", // name of item in the storage (must be unique)
-    getStorage: () => localStorage   // (optional) by default the 'localStorage' is used
-  }
-))
+  
+)

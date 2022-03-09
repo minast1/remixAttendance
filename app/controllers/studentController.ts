@@ -1,6 +1,7 @@
-import { Student, Course, Prisma } from '@prisma/client';
+import { Student, Course, Prisma, Session, Attendance } from '@prisma/client';
 import { db } from '~/lib/db.server';
 import { getSession } from '~/lib/session.server';
+import { getYear } from "date-fns";
 
 
 
@@ -61,4 +62,75 @@ export const addStudentCourses = async (ids: string[], request: Request) => {
     return user
 
 }
+type Status = "High" | "Low" | "Regular";
+export type Stats = Prisma.PromiseReturnType<typeof studentAttendanceStats>
+export const studentAttendanceStats = async (Id:string, session: Session) => {
 
+    const year = getYear(new Date());
+  //find the course where lecturer id
+    const lecutrerCourseAttendancesWithStudents = await db.lecturer.findFirst({ 
+        where: { id: Id },
+        include: {
+            course: {      
+                include: {
+                    attendances: {
+                        where: {
+              year: {
+                equals: year,
+              },
+              session: { equals: session },
+            },
+                        include: {
+                            students : true
+                        }
+                    }
+                }
+            }
+        }
+    })
+      //Get only the attendances from  lecturerCoursesAttendanceWithStudents above
+     const attendancesForCourseSession = lecutrerCourseAttendancesWithStudents?.course?.attendances
+    
+  const studentsOfferingCourse = await db.lecturer.findFirst({
+      where: { id: Id }
+  })
+      .course().students({ where: { session: session } });
+    
+    const finalData =  studentsOfferingCourse.map((student) => {
+        const totalLectsForStudentGroup: number = attendancesForCourseSession ? attendancesForCourseSession 
+            .filter((a) => a.group === student.group).length : 0; 
+        
+        const studentGroupAttendances = attendancesForCourseSession?.filter((a) => a.group === student.group)
+         
+        const lectsAttd = studentGroupAttendances?.map((attd) => {
+            const ifExists = attd.students.some((std) => std.studentId === student.id);
+              return ifExists ? 1 : 0 ;
+               })
+             
+
+        const lecturesAttendedByStudent =
+            typeof lectsAttd === "undefined" ? 0 : lectsAttd.filter((atd) => atd === 1).length;
+
+        const percentage = typeof totalLectsForStudentGroup !== "undefined"  &&   totalLectsForStudentGroup !== 0 ?
+            lecturesAttendedByStudent / totalLectsForStudentGroup * 100 : 0 ;
+         const status: Status =
+      percentage < 30
+        ? "Low"
+        : percentage >= 30 && percentage <= 70
+        ? "Regular"
+        : "High";
+        return {
+           id: student.id,
+      name: student.name,
+      indexnumber: student.indexnumber,
+            group: student.group,
+      total: totalLectsForStudentGroup,
+      attend: lecturesAttendedByStudent,
+      percentage: percentage,
+      status: status,
+        }
+    })
+  //if (!result) throw new Error("Not Found ");
+
+  return finalData;
+}

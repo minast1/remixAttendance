@@ -8,15 +8,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import AttendanceForm from "~/src/components/lecturers/AttendanceForm";
 import StudentsTable from "~/src/components/lecturers/StudentsTable";
-import {
-  ActionFunction,
-  LoaderFunction,
-  useLocation,
-  useLoaderData,
-  useTransition,
-  useFetcher,
-  useNavigate,
-} from "remix";
+import { ActionFunction, LoaderFunction, useLoaderData } from "remix";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Stack from "@mui/material/Stack";
@@ -30,7 +22,6 @@ import { db } from "~/lib/db.server";
 import startOfDay from "date-fns/startOfDay";
 import { endOfDay } from "date-fns";
 import { useMediaQuery, useTheme } from "@mui/material";
-import { useRevalidate } from "remix-utils";
 
 export let loader: LoaderFunction = async ({ request }) => {
   const auth_session = await getSession(request.headers.get("cookie"));
@@ -39,7 +30,7 @@ export let loader: LoaderFunction = async ({ request }) => {
 
   const user = auth_session.get("user");
   const { id, session } = user;
-  // console.log(id);
+
   const result = await db.lecturer.findFirst({
     where: {
       id: id,

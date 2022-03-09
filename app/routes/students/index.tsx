@@ -1,14 +1,19 @@
 import Box from "@mui/material/Box";
 import React from "react";
 import AttendanceForm from "~/src/components/students/AttendaceForm";
-import { ActionFunction, LoaderFunction, Session } from "remix";
-import { authenticator } from "~/lib/auth.server";
+import {
+  ActionFunction,
+  json,
+  LoaderFunction,
+  Session,
+  useActionData,
+} from "remix";
 import { validationError } from "remix-validated-form";
 import { getSession } from "~/lib/session.server";
 import { studentAttendanceValidator } from "~/lib/constants";
 import { validateStudentAttendance } from "~/controllers/attendanceController";
 import { db } from "~/lib/db.server";
-//import { validateStudentAttendance } from "../../controllers/attendanceController";
+import { useStore } from "~/lib/store";
 
 export default function Attendance() {
   return <AttendanceForm />;
@@ -17,7 +22,7 @@ export default function Attendance() {
 export const loader: LoaderFunction = async ({ request }) => {
   let session: Session = await getSession(request.headers.get("cookie"));
 
-  return session.data;
+  return json({ verified: 0 });
 };
 
 export const action: ActionFunction = async ({ request }) => {
