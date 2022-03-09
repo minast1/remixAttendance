@@ -61,3 +61,11 @@ export const validateStudentAttendance = async (code : string, Id:string) => {
 }
 
 export type AtttendanceType = Prisma.PromiseReturnType<typeof createAttendanceSheet>
+
+export const deleteAllStudentsFromAttendance = async (aId:string) => {
+    const deleteEntries = await db.studentsInAttendances.deleteMany({
+        where: {
+            attendanceId: { equals: aId }
+          }
+      })
+}

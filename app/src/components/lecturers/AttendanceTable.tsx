@@ -10,7 +10,7 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
-import { useLoaderData } from "remix";
+import { useFetcher, useLoaderData } from "remix";
 import { lecturerWithInfo } from "~/controllers/lecturerController";
 import { Attendance } from "@prisma/client";
 import { format } from "date-fns";
@@ -39,6 +39,7 @@ type rowType = {
 function Row({ row, lect }: rowType) {
   const [open, setOpen] = React.useState(false);
   let revalidate = useRevalidate();
+  const fetcher = useFetcher();
   return (
     <React.Fragment>
       <TableRow
@@ -100,7 +101,16 @@ function Row({ row, lect }: rowType) {
                 <RealtimeTable attendance={row} />
               </CardContent>
               <CardActions>
-                <Button size="small" variant="contained">
+                <Button
+                  size="small"
+                  variant="contained"
+                  onClick={() =>
+                    fetcher.submit(
+                      { aId: row.id },
+                      { method: "post", action: "/lecturer/dashboard" }
+                    )
+                  }
+                >
                   Clear Entries
                 </Button>
                 <Button
