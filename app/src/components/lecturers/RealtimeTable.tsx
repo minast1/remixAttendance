@@ -37,16 +37,15 @@ export default function RealtimeTable({
   const total = lecturer?.course?.students.filter(
     (student) => student.group === attendance.group
   );
-  let revalidate = useRevalidate();
 
-  React.useEffect(() => {
+  /*React.useEffect(() => {
     let interval = setInterval(() => {
       revalidate();
     }, 5000);
     return () => {
       clearInterval(interval);
     };
-  }, [revalidate]);
+  }, [revalidate]); */
 
   return (
     <Card>

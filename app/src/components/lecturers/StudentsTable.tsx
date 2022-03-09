@@ -128,7 +128,7 @@ export default function StudentsTable() {
     {
       field: "status",
       headerName: "Status",
-      //minWidth: 120,
+      minWidth: 100,
       flex: 1,
       align: "right",
       headerAlign: "right",

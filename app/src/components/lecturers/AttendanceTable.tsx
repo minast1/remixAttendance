@@ -20,6 +20,7 @@ import CardHeader from "@mui/material/CardHeader";
 import CardActions from "@mui/material/CardActions";
 import { toLowerCase } from "~/lib/constants";
 import RealtimeTable from "./RealtimeTable";
+import { useRevalidate } from "remix-utils";
 
 type rowType = {
   row: Attendance & {
@@ -37,7 +38,7 @@ type rowType = {
 
 function Row({ row, lect }: rowType) {
   const [open, setOpen] = React.useState(false);
-
+  let revalidate = useRevalidate();
   return (
     <React.Fragment>
       <TableRow
@@ -73,6 +74,7 @@ function Row({ row, lect }: rowType) {
               sx={{
                 // margin: 1,
                 bgcolor: "background.paper",
+                mb: 1,
               }}
             >
               <CardHeader
@@ -100,6 +102,14 @@ function Row({ row, lect }: rowType) {
               <CardActions>
                 <Button size="small" variant="contained">
                   Clear Entries
+                </Button>
+                <Button
+                  size="small"
+                  variant="contained"
+                  color="warning"
+                  onClick={() => revalidate()}
+                >
+                  Refresh List
                 </Button>
               </CardActions>
             </Box>
