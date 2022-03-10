@@ -9,6 +9,7 @@ import Chip from "@mui/material/Chip";
 import StyledGrid from "../StyledGrid";
 import { useRouteData } from "remix-utils";
 import { Stats } from "~/controllers/studentController";
+import Typography from "@mui/material/Typography";
 
 function escapeRegExp(value: string): string {
   return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
@@ -135,7 +136,11 @@ export default function StudentsTable() {
       renderCell: (params: GridValueGetterParams) => {
         return (
           <Chip
-            label={params.value}
+            label={
+              <Typography sx={{ fontSize: 12, fontWeight: "bold" }}>
+                {params.value}
+              </Typography>
+            }
             color={
               params.value === "High"
                 ? "success"

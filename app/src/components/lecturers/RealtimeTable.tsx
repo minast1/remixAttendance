@@ -16,7 +16,6 @@ import { lecturerWithInfo } from "~/controllers/lecturerController";
 import { Attendance } from "@prisma/client";
 import { format } from "date-fns";
 import Chip from "@mui/material/Chip";
-import { useRevalidate } from "remix-utils";
 
 export default function RealtimeTable({
   attendance,
