@@ -1,6 +1,8 @@
 import { Course, Level, Prisma, Semester, Student } from "@prisma/client";
 import { getSession } from "~/lib/session.server";
 import { db } from "../lib/db.server";
+import { getYear } from "date-fns";
+
 
 export async function  getCoursesWithLecturers () {
     const data: Course[] = await db.course.findMany({
@@ -61,9 +63,11 @@ export async function deleteCourse(Id: string) {
     })
 }
 
+type Status = "High" | "Very Low" | "Regular";
 export async function getCoursesByLevel(session:any) {
      //const session = await getSession(request.headers.get("cookie"));
-    //const stdSession = session.data.user.session;
+    const year = getYear(new Date());
+    
     const student = await db.student.findFirst({
         where: { id: session.id },
         include: {
@@ -72,7 +76,17 @@ export async function getCoursesByLevel(session:any) {
                     lecturers: {
                         where: {
                     session : session.session
-                }} , attendances : true
+                        }
+                    }, attendances: {
+                     where: {
+                    session: { equals: session.session },
+                    group: { equals: session.group },
+                    year: {equals : year}
+                },
+                include: {
+                    students : true 
+                }
+            }
             }
         }}
     })
@@ -83,12 +97,49 @@ export async function getCoursesByLevel(session:any) {
     }
     const courses = await db.course.findMany({
         where: {
-            level: student?.level
-        }
+            level: student?.level,
+        },
+        
     })
 
-     
-    return { courses, student };
+    const courseData = student.courses.map((course) => {
+        const lecsConducted = course.attendances.length; //can be 0 or more 
+
+        const lAttended = course.attendances.map((attendance) => {
+            let ifExists = attendance.students.some((astd) => astd.studentId === student.id);
+            return ifExists ? 1 : 0
+        });
+        const lecturesAttended = lAttended.filter((a) => a === 1).length;
+
+        const percentage = lecsConducted !== 0 ?
+            lecturesAttended / lecsConducted * 100 : 0;
+        
+        return {
+            id: course.id,
+            name: course.name,
+            lecturer: course.lecturers.find((lec) => student.session === lec.session)?.name,
+            attended: lecturesAttended,
+            conducted: lecsConducted,
+            percentage: percentage,
+        }
+    });
+
+      //Total lecturers attended divided by total lectures conducted
+    const totalConductedLectures: number = courseData.map((courseInfo) => courseInfo.conducted)
+        .reduce((previousValue, currentValue) => previousValue + currentValue);
+    
+    const totalAttendedLectures: number = courseData.map((courseInfo) => courseInfo.attended)
+         .reduce((previousValue, currentValue) => previousValue + currentValue);
+ 
+    const studentAttendanceStatus = totalAttendedLectures / totalConductedLectures *100 
+    
+     const status:Status = studentAttendanceStatus < 30
+        ? "Very Low"
+        : (studentAttendanceStatus >= 30) && (studentAttendanceStatus <= 70)
+        ? "Regular"
+             : "High";
+    
+    return { courses , courseData, student , status};
 };
      
   export  type StudenType = Prisma.PromiseReturnType<typeof getCoursesByLevel>

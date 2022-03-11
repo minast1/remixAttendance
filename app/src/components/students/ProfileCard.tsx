@@ -7,9 +7,10 @@ import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
 import { useLoaderData } from "remix";
 import { toLowerCase } from "~/lib/constants";
+import { StudenType } from "~/controllers/courseController";
 
 export default function ProfileCard() {
-  const { student } = useLoaderData();
+  const { student, status } = useLoaderData<StudenType>();
 
   return (
     <>
@@ -147,7 +148,17 @@ export default function ProfileCard() {
                 {" "}
                 Attendance Status:{" "}
               </Typography>
-              <Chip label="Very Weak" color="error" size="small" />
+              <Chip
+                label={status}
+                color={
+                  status === "Very Low"
+                    ? "error"
+                    : status === "High"
+                    ? "success"
+                    : "info"
+                }
+                size="small"
+              />
             </Box>
           </Stack>
         </div>

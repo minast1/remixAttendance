@@ -5,14 +5,16 @@ import { ActionFunction, LoaderFunction } from "remix";
 import { authenticator } from "~/lib/auth.server";
 import { getCoursesByLevel } from "~/controllers/courseController";
 import { addStudentCourses } from "~/controllers/studentController";
+import { Student } from "@prisma/client";
 
 export let loader: LoaderFunction = async ({ request }) => {
   // If the user is already authenticated redirect to /dashboard directl
-  const session: any = await authenticator.isAuthenticated(request, {
+  const session = (await authenticator.isAuthenticated(request, {
     failureRedirect: "/",
-  });
+  })) as Student;
 
-  return await getCoursesByLevel(session);
+  const data = await getCoursesByLevel(session);
+  return json({ ...data });
 };
 
 export default function StudentRoute() {

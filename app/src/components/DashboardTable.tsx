@@ -33,7 +33,8 @@ export const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function DashboardTable() {
   const data: StudenType = useLoaderData();
-  const { student } = data;
+  const { courseData } = data;
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table" size="small">
@@ -47,19 +48,17 @@ export default function DashboardTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {student.courses.map((row) => (
+          {courseData.map((row) => (
             <StyledTableRow key={row.id}>
               <StyledTableCell component="th" scope="row">
-                {`${row.name} (${row.code}) `}
+                {row.name}
               </StyledTableCell>
+              <StyledTableCell align="right">{row.lecturer}</StyledTableCell>
+              <StyledTableCell align="right">{row.attended}</StyledTableCell>
+              <StyledTableCell align="right">{row.conducted}</StyledTableCell>
               <StyledTableCell align="right">
-                {row.lecturers.length > 0 ? row.lecturers[0].name : "John Doe"}
+                {row.percentage.toFixed(2) + "%"}
               </StyledTableCell>
-              <StyledTableCell align="right">0</StyledTableCell>
-              <StyledTableCell align="right">
-                {row.attendances.length}
-              </StyledTableCell>
-              <StyledTableCell align="right">50%</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
