@@ -10,6 +10,7 @@ import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import AccountMenu from "~/src/components/AccountMenu";
 import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
@@ -23,6 +24,7 @@ import Stack from "@mui/material/Stack";
 import CourseSelector from "./students/CourseSelector";
 import { useStudentStore } from "~/lib/store";
 import { StudenType } from "~/controllers/courseController";
+import MenuIcon from "@mui/icons-material/Menu";
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -65,6 +67,19 @@ export default function StudentDashboardLayout({
       <CssBaseline />
       <AppBar>
         <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+            <Avatar
+              sx={{ height: 45, width: 48 }}
+              src="/itsa.jpg"
+              alt="ItsaLogo"
+            />
+          </IconButton>
           <Typography
             component="h1"
             variant="h6"

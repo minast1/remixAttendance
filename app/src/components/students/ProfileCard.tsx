@@ -8,6 +8,7 @@ import Chip from "@mui/material/Chip";
 import { useLoaderData } from "remix";
 import { toLowerCase } from "~/lib/constants";
 import { StudenType } from "~/controllers/courseController";
+import Avatar from "@mui/material/Avatar";
 
 export default function ProfileCard() {
   const { student, status } = useLoaderData<StudenType>();
@@ -38,9 +39,9 @@ export default function ProfileCard() {
             marginTop: 10,
           }}
         >
-          <img
-            style={{ height: 130, width: 130, borderRadius: 25 }}
-            src="/itsa.jpg"
+          <Avatar
+            sx={{ height: 130, width: 130 }}
+            src="/avatar-3.jpg"
             alt="ItsaLogo"
           />
           <Box

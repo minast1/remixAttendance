@@ -28,7 +28,10 @@ export default function AttendanceForm() {
       //onSubmit={handleSubmit(onSubmit)}
     >
       <div style={{ paddingBottom: 6 }}>
-        <Alert severity="info">Submit the secret Pin to confirm</Alert>
+        <Alert severity="warning">
+          Enter the Pin Code provided by the lecturer inorder to authenticate
+          your attendance status.
+        </Alert>
       </div>
       <Grid container spacing={3} alignItems="center">
         <Grid item xs={8}>

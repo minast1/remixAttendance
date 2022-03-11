@@ -126,13 +126,13 @@ export async function getCoursesByLevel(session:any) {
 
       //Total lecturers attended divided by total lectures conducted
     const totalConductedLectures: number = courseData.map((courseInfo) => courseInfo.conducted)
-        .reduce((previousValue, currentValue) => previousValue + currentValue);
+        .reduce((previousValue, currentValue) => previousValue + currentValue, 0);
     
     const totalAttendedLectures: number = courseData.map((courseInfo) => courseInfo.attended)
-         .reduce((previousValue, currentValue) => previousValue + currentValue);
+         .reduce((previousValue, currentValue) => previousValue + currentValue, 0);
  
-    const studentAttendanceStatus = totalAttendedLectures / totalConductedLectures *100 
-    
+    const studentAttendanceStatus = totalConductedLectures != 0 ? totalAttendedLectures / totalConductedLectures *100 : 0
+     // console.log(studentAttendanceStatus)
      const status:Status = studentAttendanceStatus < 30
         ? "Very Low"
         : (studentAttendanceStatus >= 30) && (studentAttendanceStatus <= 70)
