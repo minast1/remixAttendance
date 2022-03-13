@@ -22,7 +22,7 @@ const fakerStudent = () => ({
     indexnumber: Math.floor(10000000 + Math.random() * 90000000),
     group: faker.helpers.randomize(group),
     level: faker.helpers.randomize(level),
-    session: faker.helpers.randomize(session),
+    session: faker.helpers.randomize(session)
 })
 
 
