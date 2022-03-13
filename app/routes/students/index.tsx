@@ -13,16 +13,19 @@ import { getSession } from "~/lib/session.server";
 import { studentAttendanceValidator } from "~/lib/constants";
 import { validateStudentAttendance } from "~/controllers/attendanceController";
 import { db } from "~/lib/db.server";
-import { useStore } from "~/lib/store";
 
 export default function Attendance() {
-  return <AttendanceForm />;
+  return (
+    <React.Fragment>
+      <AttendanceForm />
+    </React.Fragment>
+  );
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
   let session: Session = await getSession(request.headers.get("cookie"));
 
-  return json({ verified: 0 });
+  return json({ session });
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -42,15 +45,26 @@ export const action: ActionFunction = async ({ request }) => {
       code: code,
     },
   });
-  if (attendance) {
-    const updateAttendanceStudents = await db.studentsInAttendances.create({
-      data: {
-        attendanceId: attendance.id,
-        studentId: user.id,
-        signedAt: new Date(),
+  if (!attendance) {
+    return validationError(
+      {
+        fieldErrors: {
+          code: "The attendance code is Invalid!",
+        },
+        formId: result.formId,
       },
-    });
-    return updateAttendanceStudents;
+      result.data
+    );
   }
-  throw new Error("Attendance does not exist");
+
+  const updateAttendanceStudents = await db.studentsInAttendances.create({
+    data: {
+      attendanceId: attendance.id,
+      studentId: user.id,
+      signedAt: new Date(),
+    },
+  });
+  return updateAttendanceStudents;
+
+  // throw new Error("Attendance does not exist")
 };

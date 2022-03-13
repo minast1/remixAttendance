@@ -41,7 +41,7 @@ export default function ProfileCard() {
         >
           <Avatar
             sx={{ height: 130, width: 130 }}
-            src="/avatar-3.jpg"
+            src="/itsa.jpg"
             alt="ItsaLogo"
           />
           <Box

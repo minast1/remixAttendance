@@ -67,19 +67,6 @@ export default function StudentDashboardLayout({
       <CssBaseline />
       <AppBar>
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <Avatar
-              sx={{ height: 45, width: 48 }}
-              src="/itsa.jpg"
-              alt="ItsaLogo"
-            />
-          </IconButton>
           <Typography
             component="h1"
             variant="h6"
@@ -115,7 +102,7 @@ export default function StudentDashboardLayout({
 
             <Grid item container spacing={5} xs={12} sm={12} md={9} lg={9}>
               <Grid item xs={12}>
-                <Alert severity="info" sx={{ mb: 3 }}>
+                <Alert severity="info" sx={{ mb: 3, borderRadius: 6 }}>
                   <AlertTitle>{`Welcome ${student.name}`}</AlertTitle>
                   {student.courses.length > 0 ? (
                     <Box>
@@ -172,6 +159,7 @@ export default function StudentDashboardLayout({
                       size="small"
                       variant="contained"
                       component={Link}
+                      sx={{ textTransform: "capitalize" }}
                       to="."
                     >
                       Enter Attendance
@@ -182,9 +170,9 @@ export default function StudentDashboardLayout({
                       variant="contained"
                       component={Link}
                       to="/students/profileEdit"
-                      sx={{ ml: 2 }}
+                      sx={{ ml: 2, textTransform: "capitalize" }}
                     >
-                      Edit Student Profile
+                      Edit Profile
                     </Button>
                   </Box>
                   <Divider sx={{ mt: 1 }} />
