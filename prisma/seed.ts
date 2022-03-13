@@ -22,7 +22,7 @@ const fakerStudent = () => ({
     indexnumber: Math.floor(10000000 + Math.random() * 90000000),
     group: faker.helpers.randomize(group),
     level: faker.helpers.randomize(level),
-    session: faker.helpers.randomize(session)
+    session: faker.helpers.randomize(session),
 })
 
 
@@ -30,14 +30,15 @@ const fakerStudent = () => ({
 async function seed() {
     const totalStudents = 100;
     const totalLecturers = 60;
-const totalAdmins = 4;
+    const totalAdmins = 4;
     
 
-      //Create and get the course ids 
-    const courseIds: string[] = await Promise.all(courses.map(async (item: Courses) => {
+    //Create and get the course ids 
+   
+    const courseIds: string[] = await Promise.all(courses.map(async(item: Courses) => {
         const course = await db.course.create({
-            data: item,
-            select: { id: true }
+            data: { ...item },
+           // select: { id: true }
         });
         return course.id
 
@@ -47,10 +48,10 @@ const totalAdmins = 4;
         await db.lecturer.create({
             data: {
                 email: faker.internet.email(),
-            name: faker.fake('{{name.prefix}}, {{name.firstName}} {{name.lastName}}'),
-           password: faker.internet.password(),
-          session: faker.helpers.randomize(session),
-         courseId: faker.helpers.randomize(courseIds)
+                name: faker.fake('{{name.prefix}}, {{name.firstName}} {{name.lastName}}'),
+                password: faker.internet.password(),
+                session: faker.helpers.randomize(session),
+                courseId: faker.helpers.randomize(courseIds)
             }
         })
         
@@ -59,20 +60,26 @@ const totalAdmins = 4;
     //Create Admins
     for (let index = 0; index < totalAdmins; index++) {
         await db.admin.create({
-             data: fakerAdmin()
-         })
+            data: fakerAdmin()
+        })
         
     }
 
     //Create Students
     for (let index = 0; index < totalStudents; index++) {
         await db.student.create({
-             data: fakerStudent()
-         })
+            data: {
+                name: faker.fake('{{name.firstName}} {{name.lastName}}'),
+                indexnumber: Math.floor(10000000 + Math.random() * 90000000).toString(),
+                group: faker.helpers.randomize(group),
+                level: faker.helpers.randomize(level),
+                session: faker.helpers.randomize(session),
+            }
         
+        })
+    
+    
     }
-    
-    
 }
 
 seed().catch((e) => {
