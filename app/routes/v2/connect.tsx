@@ -55,7 +55,7 @@ export const action: ActionFunction = async ({ request }) => {
   let session = await getSession(request.headers.get("cookie"));
   const data = await request.formData();
   const code = data.get("code") as string;
-  console.log(data);
+
   const user = session.get("user");
   const attendance = await db.attendance.findFirst({
     where: {
