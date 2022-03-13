@@ -9,6 +9,7 @@ export let loader: LoaderFunction = async ({ request }) => {
   // If the user is already authenticated redirect to /dashboard directl
   let session = await getSession(request.headers.get("cookie"));
   const data = session.get("user");
+
   return json({ ...data });
 };
 

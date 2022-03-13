@@ -24,7 +24,7 @@ export default function Attendance() {
 
 export const loader: LoaderFunction = async ({ request }) => {
   let session: Session = await getSession(request.headers.get("cookie"));
-
+ 
   return json({ session });
 };
 
