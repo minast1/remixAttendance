@@ -1,4 +1,4 @@
-# Remix example
+# Attendance App built with Remix.js PlanetScale DB and Prisma
 
 ## How to use
 
