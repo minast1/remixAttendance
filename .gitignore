@@ -4,9 +4,6 @@ node_modules
 /build
 /public/build
 .env
-/node_modules
-/coverage
-.vscode
-yarn-error.log*
+
 /package-lock.json
 /yarn.lock
