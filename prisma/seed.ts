@@ -11,7 +11,7 @@ import { courses, Courses } from "../app/lib/courses.server";
     const semester: Semester[] = ["FIRST", "SECOND"]
 
 
-//const creteCoursesAndLecturers ()
+
 const fakerAdmin = () => ({
     email: faker.internet.email(),
     password: faker.internet.password(),
