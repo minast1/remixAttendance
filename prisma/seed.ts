@@ -25,7 +25,7 @@ const fakerStudent = () => ({
     session: faker.helpers.randomize(session)
 })
 
-
+//console.log("ERROR")
 
 async function seed() {
     const totalStudents = 100;
